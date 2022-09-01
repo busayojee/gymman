@@ -1,0 +1,43 @@
+
+    {%for teacher in result.items %}
+    {%if loop.last and result.has_next%}
+        <tr hx-get="{{url_for('view_trainer', id=user.user_id, page = result.next_num)}}" hx-trigger="revealed delay:1s" hx-swap="afterend">
+        {%else%}
+        
+      <tr>
+        {%endif%}
+    <td>
+      <div class="d-flex align-items-center">
+        {% if teacher.profile_image != 'none' %}
+        <img
+        src="{{url_for('static', filename = 'uploads/' + teacher.profile_image)}}"
+        alt=""
+        style="width: 45px; height: 45px"
+        class="rounded-circle"
+        />
+            {% else %}
+        <img
+            src="/static/assets/7.png"
+            alt=""
+            style="width: 45px; height: 45px"
+            class="rounded-circle"
+            />
+            {% endif %}
+        <div class="ms-3">
+          <p class="fw-bold mb-1">{{teacher.firstname}} {{teacher.lastname}}</p>
+          <p class="text-muted mb-0">{{teacher.email}}</p>
+        </div>
+      </div>
+    </td>
+    <td>
+      <p class="fw-normal mb-1">{{teacher.gender}}</p>
+    </td>
+  
+    <td>{{teacher.age}}</td>
+    <td>
+      <button href="" type="button" class="btn btn-link btn-sm btn-rounded"><a href="/member/{{user.user_id}}/trainer/{{teacher.user_id}}/view">
+        View Profile</a>
+      </button>
+    </td>
+  </tr>
+  {%endfor%}

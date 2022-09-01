@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/css/aos.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap">
+</head>
+<body>
+    <!-- Header -->
+    <div class="main" id="home">
+        <div class="row">
+        <!-- Navigation -->
+    <div class="navigation">
+        <div class="logo">
+            <!-- Logo -->
+            <a href="/" class="logolink">
+                <p style="font-family: cursive;">gymonline</p>
+            </a>
+        </div>
+        <!-- End of logo -->
+        <div class="burger">
+            <div class="one"></div>
+            <div class="two"></div>
+            <div class="three"></div>
+        </div>
+        <!--End of Burger menu -->
+        <ul class="navlist">
+            <li><a class="active" href="/member/{{user.user_id}}">Home</a></li>
+            <li><a href="/member/{{user.user_id}}#trainer">Trainer</a></li>
+            <li><a href="/member/{{user.user_id}}#pexercises">Premium Exercise</a></li>
+            <li><a href="/#diet">Diet</a></li>
+            <li><a href="">Help</a></li>
+            <li class="dropdown"><a class="dropbtn" href=""><i class="fas fa-user"></i></a>
+            <div class="contentm">
+                <p></p>
+                <p> Hello {{user.firstname}} </p>
+                <p><a href="/member/{{user.user_id}}/profile" ><i class="fas fa-user"></i>  My profile </a></p>
+                <button><a href="/">Logout</a></button>
+                <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
+            </div>
+            </li>
+        </ul>
+        <!-- End of navlist -->
+    </div>
+    <!-- End of navigation -->
+       
+    </div>
+    <!-- End of slideshow -->
+    </div>
+    <!-- End of main -->
+
+     <!-- About section -->
+     
+     <div class="about" id="trainer" data-aos="fade-in">
+        {% for mem in member%}
+        {%if not mem.trainer_id %}
+        <div class="about_content"> 
+
+            
+            <div class="aboutus">
+                <p> <span>No Trainer</span></p>
+                <p><p class="para">
+                    To add a new trainer <a href="/member/{{user.user_id}}/trainer">click here</a> 
+                     </p></p></div></div>
+                     {% endif %}
+                     {% endfor %} 
+                     {% for train in trainer %}
+             <div class="about_content"> 
+            <div class="about_img">
+               {% if trainer.profile_image != 'none' %}
+               <img src="{{url_for('static', filename = 'uploads/' + train.profile_image)}}" alt="">
+                {%else%}
+                <img src="/static/assets/7.png" alt="">
+                {% endif %}
+            </div>
+            <div class="aboutus">
+                <p> <span>{{train.firstname}} {{train.lastname}}</span></p>
+                <p><p class="para">
+                    {{train.profile}}
+                     </p></p>
+                <div class="socials">
+                    <a href=""><i class="fab fa-google"></i></a>
+                    <a href="/member/{{user.user_id}}/trainer/{{train.user_id}}/view"><i class="fas fa-user"></i></a>
+                </div> <!-- End of social icons -->
+           </div> <!-- End of aboutus -->
+          
+        </p>
+        
+          
+   
+</div> {%endfor%}<!-- End of about content -->
+</div> <!-- End of about section -->
+
+<!-- Training -->
+<div class="training" id="pexercises" data-aos="fade-up">
+    <h3>Exercise</h3>
+    {% for ex in exercise %} 
+    {% if ex %}
+    <a href="/" class="view">view all -></a>
+    <div class="scroll snap">
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/1.jpg" alt="">
+            <p class="title">short title</p>
+        </div>
+        </div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/2.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/3.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/4.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/5.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/1.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/2.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/3.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/4.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+        <div class="element">
+            <div class="image">
+            <img src="/static/assets/5.jpg" alt="">
+            <p class="title">short title</p>
+        </div></div>
+    </div>
+    {%else%}
+    <div class="aboutus">
+        <p> <span>No Exercise</span></p>
+        <p><p class="para">
+            Add a trainer to get exercises
+             </p></p></div>
+    {%endif%}
+    {% endfor %}
+    </div>
+
+</div>
+    <!-- Contact us -->
+    <div class="contact" id="contact" data-aos="fade-up">
+        <h3>Contact Us</h3>
+        <div class="form_wrapper">
+            <form class="form">
+                <input type="text" placeholder="Full Name">
+                <input type="email" placeholder="Email Id">
+                <input type="tel" placeholder="Contact">
+                <textarea rows="4" placeholder="Message"></textarea>
+                <input type="submit" class="btn" value="Submit">
+            </form> <!-- End of form -->
+        </div> <!-- End of form wrapper -->
+    </div> <!-- End of contact us section -->
+
+
+
+    </div>
+    <footer class="footer" data-aos="fade-in">
+        <div>
+            <a href="/">
+                 <a href="/"> <p> gymonline </p>
+                </a>  </a>
+                 
+               
+        </div>
+        <div>
+            <a href="#"><i class="fab fa-facebook-square"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-dribbble"></i></a>
+        </div>
+        <p class="footer-c">gymonline © 2022</p>
+    </footer>
+    
+    <script src="/static/js/easy_background.js"></script>
+
+    <script>
+      easy_background(".main",
+  
+        {
+          slide: [ "/static/assets/31.jpg", "/static/assets/22.jpg", "/static/assets/29.jpg", "/static/assets/25.png"],
+  
+          delay: [ 2000, 2000, 2000, 2000]
+        }
+  
+  
+      );
+    </script>
+<script src="/static/js/aos.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
+
+</body>
+</html>

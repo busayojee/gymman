@@ -1,0 +1,26 @@
+<div class="row g-2" >
+    {%for image in images.items%}
+    <div class="col mb-2 im">
+      <div class="image">
+      <img src="{{url_for('static', filename = 'uploads/' + image.image_file)}}"
+        alt="image 1" class="w-100 rounded-3" style="width: 250px; height:250px; object-fit: cover;">
+        <div class="text">{{image.caption}}
+          <p style="font-size: 10px;">
+            {{image.date_added}} 
+          </p>
+        </div>
+    </div>
+  </div>
+    {%if loop.last and images.has_next%}
+        
+          <center><i  class="fas fa-chevron-circle-down imgicon" hx-get="{{url_for('trainer_profile', id=user.user_id, id2=teacher.user_id, page = images.next_num)}}" hx-swap="outerHTML" hx-target="this"></i>
+                </center>   
+    {%else%}
+   
+    {%endif%}
+    {%endfor%}
+</div>
+    
+    
+    
+    
