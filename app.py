@@ -537,8 +537,6 @@ def free_upload(id):
             db.session.commit() 
             return redirect(request.url)
     return render_template('freevideo.html', trainer = trainer)
-
-
 # link = "https://www.youtube.com/embed/-237OttBIBE"
 # linklist = link.split("/")
 # print(linklist)
