@@ -1,0 +1,151 @@
+{%extends 'layout.html'%}
+{%block body%}
+<center>
+  <div style="width: 350px;">
+<div class="form-outline">
+  <input name="search" type="search" id="form1" class="form-control" placeholder="search" aria-label="Search"
+  hx-get = "/trainer/{{trainer.user_id}}/premiumworkout"
+  hx-trigger="keyup changed delay:500ms"      
+  hx-target="#target"
+  />
+</div></div></center>
+<center><button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#staticBackdrop">
+    Upload
+  </button></center>
+  <div
+  class="modal fade"
+  id="staticBackdrop"
+  data-mdb-backdrop="static"
+  data-mdb-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="staticBackdropLabel">Upload a Premium video</h3>
+            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+          </div>
+    
+        <div class="modal-body">
+
+        
+<form action="/trainer/{{trainer.user_id}}/premiumworkout" method="post" enctype="multipart/form-data">
+                 
+
+                  <div class="form-outline mb-4">
+                    <label class="form-check-label" >Video file:</label>   
+                      <input type="file" name = "video_file">
+                  
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input name="link" type="text" id="form3Example97" class="form-control form-control-lg" value="None" required/>
+                    <label class="form-label" for="form3Example97">Embed link</label>
+                  </div>
+                  <div class="md-form">
+                    <label for="form7">Exercise Name</label>
+                    <input name="caption" type="text" id="form3Example97" class="form-control form-control-lg" value="None" required/>
+                  
+                  </div>
+                 
+                  <div class="md-form">
+                    <label for="form7">Exercise description</label>
+                    <textarea name="description" id="form7" class="md-textarea form-control" rows="3" value="">None</textarea>
+                    
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-check-label" >Members</label> 
+                      <select class="select" name="member" required>
+                        <option value=""></option>
+                        {%for memb in memb%}
+                        <option value="{{memb.member_id}}">{{memb.firstname}} {{memb.lastname}}</option>
+                        {%endfor%}
+                       
+                    
+                      </select>
+  
+                    </div>
+                  </div>
+                
+                </div>
+
+                 
+                 
+                  <div class="modal-footer">
+  
+                  <div class="d-flex justify-content-end pt-3">
+                 <button type="submit" class="btn btn-success btn-lg ms-2">Upload</button> 
+                  </div></div>
+                     </form></div></div></div>
+                    
+                     <h3>Previous Uploads:</h3>
+<div
+id="carouselMultiItemExample"
+class="carousel slide carousel-dark text-center"
+data-mdb-ride="carousel"
+>
+
+  <div class="carousel-inner py-4">
+    
+    <div class="carousel-item active">
+        <div class="container"id="target">
+{%include 'trainexerciseview.html'%}
+</div>
+</div>
+</div>
+
+  </div>
+  {%for tr in free%}
+    <div
+      class="modal fade"
+      id="p{{tr.exercise_thumbnail}}"
+      tabindex="-1"
+      aria-labelledby="exampleModal1Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="ratio ratio-16x9">
+              {%if tr.exercise_file != 'N/A'%}
+              <video controls>
+                  <source src="{{url_for('static', filename = 'uploads/' + tr.exercise_file)}}" type="video/mp4">
+              </video>      
+              {%else%}
+            <iframe
+              src="https://www.youtube.com/embed/{{tr.exercise_link}}"
+              title="YouTube video"
+              allowfullscreen
+            ></iframe>
+            {%endif%}
+          </div>
+
+          <div class="text-center py-3">
+            <center><p> 
+                {%if tr.exercise_caption != 'None'%}
+                <b style="font-size: 20px;">{{tr.exercise_name}}</b><br>
+                {%endif%}
+                {%if tr.exercise_description != 'None'%}
+               <span style="font-weight: 100; margin:auto;">{{tr.exercise_description}}</span><br>
+               {%endif%}
+               
+               <i style="font-size: 10px;">by {{tr.firstname}} {{tr.lastname}} to {{tr.mfirst}} {{tr.mlast}} on {{tr.date_added}}</i>
+               
+            </p>
+
+            </center>
+            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+              Close
+            </button>
+            <a href="/trainer/{{trainer.user_id}}/exerciseworkout/{{tr.exercise_id}}/delete" onclick="return confirm('Are you sure?')">
+            <button type="button" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+              </button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+    </div>
+    {%endblock%}

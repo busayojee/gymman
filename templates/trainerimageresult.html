@@ -1,9 +1,10 @@
 <div class="row g-2">
 {%for image in images.items%}
+
 <div class="col mb-2 im">
   <div class="image">
     <img src="{{url_for('static', filename = 'uploads/' + image.image_file)}}"
-      alt="image 1" class="w-100 rounded-3" style="width: 250px; height:250px; object-fit: cover;">
+      alt="image 1" class="w-100 rounded-3">
       <div class="text">{{image.caption}}
         <p style="font-size: 10px;">
           {{image.date_added}} 
@@ -18,13 +19,12 @@
     
       <center><i  class="fas fa-chevron-circle-down imgicon" hx-get="{{url_for('trainerprofile', id=trainer.user_id, page = images.next_num)}}" hx-swap="outerHTML" hx-target="this"></i>
             </center>   
-{%else%}
 
+ 
 {%endif%}
 
 {%endfor%}
 </div>
-
 
 
 

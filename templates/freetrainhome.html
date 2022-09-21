@@ -1,0 +1,93 @@
+
+
+  <!-- Inner -->
+
+  <!-- <div class="carousel-inner py-4">
+    
+    <div class="carousel-item active"> -->
+        <div class="container" id="target" >
+          <h3 style="margin-top: -80px;">Free Training</h3> 
+            <a href="/trainer/{{trainer.user_id}}/freeworkout" class="view">view all -></a>
+  <div class="row" >
+    {%for fr in datas%}
+    <div class="col-lg-4">
+      <div
+        class="bg-image hover-overlay ripple shadow-1-strong rounded"
+        data-ripple-color="light"
+      >
+      {%if fr.free_file != 'N/A'%}
+      <img
+      src="{{url_for('static', filename = 'uploads/' + fr.free_thumbnail + '.jpg')}}"
+      class="w-100" style="max-height: 200px; object-fit: cover; margin: 2px;"
+    />
+      {%else%}
+        <img
+          src="https://img.youtube.com/vi/{{fr.free_thumbnail}}/maxresdefault.jpg"
+          class="w-100" style="max-height: 200px; object-fit: cover; margin: 2px;"
+        />
+        {%endif%}
+        <a href="#!" data-mdb-toggle="modal" data-mdb-target="#f{{fr.free_thumbnail}}">
+            
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.2);"></div>
+          </a>
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+        </div>
+    <!-- </div>
+  </div> -->
+  {%for tr in free%}
+      <div
+        class="modal fade"
+        id="f{{tr.free_thumbnail}}"
+        tabindex="-1"
+        aria-labelledby="exampleModal1Label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="ratio ratio-16x9">
+                {%if tr.free_file != 'N/A'%}
+                <video controls>
+                    <source src="{{url_for('static', filename = 'uploads/' + tr.free_file)}}" type="video/mp4">
+                </video>      
+                {%else%}
+              <iframe
+                src="https://www.youtube.com/embed/{{tr.free_link}}"
+                title="YouTube video"
+                allowfullscreen
+              ></iframe>
+              {%endif%}
+            </div>
+  
+            <div class="text-center py-3">
+                <center><p> 
+                    {%if tr.free_caption != 'None'%}
+                    <b style="font-size: 20px;">{{tr.free_caption}}</b><br>
+                    {%endif%}
+                    {%if tr.free_description != 'None'%}
+                   <span style="font-weight: 100; margin:auto;">{{tr.free_description}}</span><br>
+                   {%endif%}
+                   
+                   <i style="font-size: 10px;">by {{tr.firstname}} {{tr.lastname}} on {{tr.date_added}}</i>
+                   
+                </p>
+    
+                </center>
+              <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+   
+<!-- </section> -->
+<!-- Section: Images -->
+
+<!-- Section: Modals -->
+<!-- <section class=""> -->
+  <!-- Modal 1 -->
+  

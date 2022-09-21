@@ -1,0 +1,32 @@
+{%if pagin.has_next%}
+<div class="row" hx-get="{{url_for('trainer_free', id=trainer.user_id, page=pagin.next_num)}}" hx-trigger="revealed" hx-swap="afterend">
+    {%else%}
+    <div class="row">
+        {%endif%}
+    {%for fr in pagin.items%}
+    <div class="col-lg-4" style="margin-bottom: 7px;" hx-target="this" >
+      <div
+        class="bg-image hover-overlay ripple shadow-1-strong rounded"
+        data-ripple-color="light"
+        >
+      {%if fr.free_file != 'N/A'%}
+      <img
+      src="{{url_for('static', filename = 'uploads/' + fr.free_thumbnail + '.jpg')}}"
+      class="w-100" style="max-height: 200px; object-fit: cover;"
+    />
+      {%else%}
+        <img
+          src="https://img.youtube.com/vi/{{fr.free_thumbnail}}/maxresdefault.jpg"
+          class="w-100"
+        />
+        {%endif%}
+        <a href="#!" data-mdb-toggle="modal" data-mdb-target="#f{{fr.free_thumbnail}}">
+            
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.2);"></div>
+          </a>
+      </div>
+    </div>
+   
+    {%endfor%}
+    <div id="at"></div>
+  </div>

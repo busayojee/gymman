@@ -7,6 +7,15 @@ function slideMenu(){
     navlist.classList.toggle('toggle_navigation');
 };
 
+var fullbox = document.getElementById("fullbox");
+var fullimg = document.getElementById("fullimg");
+function openf(pic){
+    fullbox.style.display = 'flex';
+    fullimg.src = pic;
+}
+function closef(){
+    fullbox.style.display = 'none';
+}
 // slideshow
 // var myIndex = 0;
 // carousel();

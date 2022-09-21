@@ -47,7 +47,7 @@ rel="stylesheet"
         <ul class="navlist">
             <li><a class="active" href="/">Home</a></li>
             <li><a href="/#about">About</a></li>
-            <li><a href="/#training">Free workouts</a></li>
+            <li><a href="/freevideo/all">Free workouts</a></li>
             <li><a href="/#contact">Contact Us</a></li>
             <li><a href="">Help</a></li>
             <li class="dropdown"><a class="dropbtn" href="/login"><i class="fas fa-user"></i></a>
@@ -94,7 +94,7 @@ rel="stylesheet"
 <!-- Training -->
 <div class="training" id="training" >
     <h3>Free Training</h3> 
-    <a href="/" class="view">view all -></a>
+    <a href="/freevideo/all" class="view">view all -></a>
     <div
 id="carouselMultiItemExample"
 class="carousel slide carousel-dark text-center"
@@ -103,13 +103,13 @@ data-mdb-ride="carousel"
 <div class="d-flex justify-content-center mb-4">
    
     <button
-      class="carousel-control-prev position-relative"
+      class="carousel-control-prev position-relative but"
       type="button"
       data-mdb-target="#carouselMultiItemExample"
       data-mdb-slide="prev"
       hx-get="{{url_for('home',  page = free.prev_num)}}"
       hx-target="#target"
-      hx-swap="outerHTML"
+      hx-swap="outerHTML swap:0.8s"
     >
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
@@ -118,13 +118,13 @@ data-mdb-ride="carousel"
 
     
     <button
-      class="carousel-control-next position-relative"
+      class="carousel-control-next position-relative but"
       type="button"
       data-mdb-target="#carouselMultiItemExample"
       data-mdb-slide="next"
       hx-get="{{url_for('home',  page = free.next_num)}}"
       hx-target="#target"
-      hx-swap="outerHTML"
+      hx-swap="outerHTML swap:0.8s"
     >
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
@@ -149,7 +149,7 @@ data-mdb-ride="carousel"
     {%for tr in modal%}
       <div
         class="modal fade"
-        id="{{tr.free_thumbnail}}"
+        id="f{{tr.free_thumbnail}}"
         tabindex="-1"
         aria-labelledby="exampleModal1Label"
         aria-hidden="true"
@@ -171,6 +171,19 @@ data-mdb-ride="carousel"
             </div>
   
             <div class="text-center py-3">
+                <center><p> 
+                    {%if tr.free_caption != 'None'%}
+                    <b style="font-size: 20px;">{{tr.free_caption}}</b><br>
+                    {%endif%}
+                    {%if tr.free_description != 'None'%}
+                   <span style="font-weight: 100; margin:auto;">{{tr.free_description}}</span><br>
+                   {%endif%}
+                   
+                   <i style="font-size: 10px;">by {{tr.firstname}} {{tr.lastname}}  on {{tr.date_added}}</i>
+                   
+                </p>
+    
+                </center>
               <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
                 Close
               </button>
@@ -239,7 +252,7 @@ data-mdb-ride="carousel"
 
 </div>
     <!-- Contact us -->
-    <div class="contact" id="contact" data-aos="fade-up">
+    <div class="contact" id="contact" >
         <h3>Contact Us</h3>
         <div class="form_wrapper">
             <form class="form">
@@ -266,7 +279,7 @@ data-mdb-ride="carousel"
   <!-- </section> -->
   <!-- Modal gallery -->
 
-    <footer class="footer" data-aos="fade-in">
+    <footer class="footer" >
         <div>
             <a href="/">
                  <a href="/"> <p> gymonline </p>

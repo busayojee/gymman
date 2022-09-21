@@ -180,7 +180,7 @@ li.dropdown{
 }
 .contentm{
     display: none;
-    position: fixed;
+    position: absolute;
     margin-left: -4%;
     background-color: #fff;
     width: 150px;
@@ -408,6 +408,12 @@ li.dropdown{
     border-radius: 12px;
     box-shadow: 0 30px 45px rgba(26, 26, 26, 0.1);
 }
+.dtraining{
+    width: 100%;
+    height: 700px;
+    border-radius: 12px;
+    box-shadow: 0 30px 45px rgba(26, 26, 26, 0.1);
+}
 .view{
     display: flex;
     align-items: flex-end;
@@ -455,7 +461,10 @@ li.dropdown{
 }
 @media screen and (max-width: 1000px){
     .training{
-        height: 200vh;
+        height: 150vh;
+    }
+    .dtraining{
+        height: 230vh;
     }
     .scroll{
         padding-right: 30px;
@@ -469,6 +478,14 @@ li.dropdown{
     }
     .snap{
         scroll-padding-inline: 17vh;
+    }
+}
+@media screen and (max-width: 450px){
+    .training{
+        height: 110vh;
+    }
+    .dtraining{
+        height: 185vh;
     }
 }
 
@@ -632,20 +649,35 @@ textarea {
     .imgicon:hover{
         cursor: pointer;
     }
+    .im{
+        max-height: 250px;
+    }
+    .im.image{
+        border: 1050px;
+        border-color: rgb(255, 0, 0);
+    }
 
     .im .image img{
         transition: 0.5s ease-in-out;
         cursor: pointer;
         object-fit: cover;
+        width: 250px; 
+        height:250px; 
+        
     }
-    .im:hover .image img{
+    /* .im:hover .image img{
         transform: scale(1.1);
-    }
+    } */
+    /* .text{
+        position: relative;
+
+    } */
     .im .image .text{
         opacity: 0;
         position: relative;
-        top: 80%;
+        top: -70px;
         left: 50%;
+        /* margin-top: -50%; */
         transform: translate(-50%, -50%);
         color: #fff;
         font-size: 15px;
@@ -659,9 +691,9 @@ textarea {
     }
     .im:hover .image .text{
         opacity: 1;
-        animation: move-down .3s linear;
+        /* animation: move-down .3s linear; */
         padding: 1rem;
-        margin-top: -50%;
+        /* margin-top: -50%; */
         width: 100%;
     }
     @keyframes move-down{
@@ -680,4 +712,62 @@ textarea {
     }
     .trashicon:hover{
         cursor: pointer;
+    }
+    .but.htmx-swapping{
+        transition: ease-in-out;
+    }
+    /* Diet */
+    .diet_text{
+        display: block;
+        margin: 0px;
+        width:200px;
+        max-height:40px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        
+    }
+    #diet_modal{
+        margin-left: -70px;
+        width: 100vh;
+        overflow: auto;
+    }
+    @media screen and (max-width: 1000px){
+        #diet_modal{
+            width: 100%;
+            margin-left: 0px;
+        }
+    }
+    .full{
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+    }
+    .full img{
+        width: 100%;
+        max-width: 700px;
+        
+    }
+    .full span{
+        position: absolute;
+        top: 5%;
+        right: 5%;
+        font-size: 30px;
+        color: #fff;
+        cursor: zoom-out;
+  
+    }
+    .normal{
+        object-fit: cover;
+        width: 100%;
+        max-height: 300px;
+        cursor: zoom-in;
+        border-radius: 5px;
     }

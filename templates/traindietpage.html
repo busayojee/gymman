@@ -1,0 +1,25 @@
+{%if diet.has_next%}
+<div class="row" hx-get="{{url_for('trainer_diet', id=trainer.user_id, page=diet.next_num)}}" hx-trigger="revealed" hx-swap="afterend">
+    {%else%}
+    <div class="row">
+        {%endif%}
+    {%for di in diet.items%}
+    <div class="col-lg-4">
+      <div class="card">
+        <img
+          src="{{url_for('static', filename = 'uploads/' + di.diet_file)}}"
+          class="card-img-top"
+          alt="Waterfall"
+          style="max-height: 250px; height: 250px; object-fit: cover;"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{di.diet_name}}</h5>
+          <p class="card-text" style="font-weight: 100;">
+            Valid From {{di.start_date}} to {{di.end_date}}
+          </p>
+          <a href="#!" class="btn btn-primary"  data-mdb-toggle="modal" data-mdb-target="#d{{di.diet_id}}">View</a>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+  </div>

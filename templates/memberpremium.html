@@ -1,0 +1,80 @@
+{%extends 'layout.html'%}
+{%block body%}
+<center>
+  <div style="width: 350px;">
+<div class="form-outline">
+  <input name="search" type="search" id="form1" class="form-control" placeholder="search" aria-label="Search"
+  hx-get = "/member/{{user.user_id}}/premium/all"
+  hx-trigger="keyup changed delay:500ms"      
+  hx-target="#target"
+  />
+</div></div></center>
+
+ 
+                    
+                     <h3>Previous Uploads:</h3>
+<div
+id="carouselMultiItemExample"
+class="carousel slide carousel-dark text-center"
+data-mdb-ride="carousel"
+>
+
+  <div class="carousel-inner py-4">
+    
+    <div class="carousel-item active">
+        <div class="container"id="target">
+{%include 'membpremium.html'%}
+</div>
+</div>
+</div>
+
+  </div>
+  {%for tr in free%}
+    <div
+      class="modal fade"
+      id="p{{tr.exercise_thumbnail}}"
+      tabindex="-1"
+      aria-labelledby="exampleModal1Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="ratio ratio-16x9">
+              {%if tr.exercise_file != 'N/A'%}
+              <video controls>
+                  <source src="{{url_for('static', filename = 'uploads/' + tr.exercise_file)}}" type="video/mp4">
+              </video>      
+              {%else%}
+            <iframe
+              src="https://www.youtube.com/embed/{{tr.exercise_link}}"
+              title="YouTube video"
+              allowfullscreen
+            ></iframe>
+            {%endif%}
+          </div>
+
+          <div class="text-center py-3">
+            <center><p> 
+                {%if tr.exercise_caption != 'None'%}
+                <b style="font-size: 20px;">{{tr.exercise_name}}</b><br>
+                {%endif%}
+                {%if tr.exercise_description != 'None'%}
+               <span style="font-weight: 100; margin:auto;">{{tr.exercise_description}}</span><br>
+               {%endif%}
+               
+               <i style="font-size: 10px;"> by {{tr.tfirst}} {{tr.tlast}} to {{tr.firstname}} {{tr.lastname}} on {{tr.date_added}}</i>
+               
+            </p>
+
+            </center>
+            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+              Close
+            </button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+    </div>
+    {%endblock%}

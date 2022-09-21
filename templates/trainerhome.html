@@ -46,15 +46,23 @@
         <ul class="navlist">
             <li><a class="active" href="/trainer/{{trainer.user_id}}">Home</a></li>
             <li><a href="/trainer/{{trainer.user_id}}#trainer">Members</a></li>
-            <li><a href="/trainer/{{trainer.user_id}}#pexercises">Exercises</a></li>
-            <li><a href="/#diet">Diet</a></li>
+            <li class="dropdown"><a class="dropbtn" href="/trainer/{{trainer.user_id}}#pexercises">Exercises</a>
+                <div class="contentm">
+                    <p></p>
+                    <p><a href="/trainer/{{trainer.user_id}}/freeworkout" ><i class="fas fa-user"></i>  Free workouts </a></p>
+                    <p><a href="/trainer/{{trainer.user_id}}/premiumworkout" ><i class="fas fa-user"></i>  Premium workouts </a></p>
+                    
+                    <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
+                </div>
+            </li>
+            <li><a href="/trainer/{{trainer.user_id}}/diet">Diet</a></li>
             <li><a href="">Help</a></li>
             <li class="dropdown"><a class="dropbtn" href=""><i class="fas fa-user"></i></a>
             <div class="contentm">
                 <p></p>
                 <p> Hello {{trainer.firstname}} </p>
                 <p><a href="/trainer/{{trainer.user_id}}/profile" ><i class="fas fa-user"></i>  My profile </a></p>
-                <button><a href="/">Logout</a></button>
+                <button><a href="/logout">Logout</a></button>
                 <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
             </div>
             </li>
@@ -134,74 +142,215 @@
        </div> <!-- End of about section -->
 
 <!-- Training -->
-<div class="training" id="pexercises" data-aos="fade-up">
+<div class="training" id="pexercises">
     <h3>Exercise</h3>
-    {% for ex in exercise %} 
-    {% if ex %}
-    <a href="/" class="view">view all -></a>
-    <div class="scroll snap">
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/1.jpg" alt="">
-            <p class="title">short title</p>
-        </div>
-        </div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/2.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/3.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/4.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/5.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
+    <div
+id="carouselMultiItemExample"
+class="carousel slide carousel-dark text-center"
+data-mdb-ride="carousel"
+>
+<div class="d-flex justify-content-center mb-4">
+   
+    <button
+      class="carousel-control-prev position-relative but"
+      type="button"
+      data-mdb-target="#carouselMultiItemExample"
+      data-mdb-slide="prev"
+      hx-get="{{url_for('trainer',  id = trainer.user_id)}}"
+      hx-target="#target"
+      hx-swap="innerHTML swap:0.8s"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+   
+
+    
+    <button
+      class="carousel-control-next position-relative but"
+      type="button"
+      data-mdb-target="#carouselMultiItemExample"
+      data-mdb-slide="next"
+      hx-get="{{url_for('free_train_home', id=trainer.user_id)}}"
+      hx-target="#target"
+      hx-swap="innerHTML swap:0.8s"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+  </button>
+
+
+ 
+  </div>
+
+     
+  
+
+  <div class="carousel-inner py-4">
+     
+    <div class="carousel-item active" >  
         
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/1.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/2.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/3.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/4.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/5.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
+           
+{%include 'premium.html'%}
+
+
+</div>
+</div>
+
+
+
+    {%for tr in frees%}
+      <div
+        class="modal fade"
+        id="f{{tr.exercise_thumbnail}}"
+        tabindex="-1"
+        aria-labelledby="exampleModal1Label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="ratio ratio-16x9">
+                {%if tr.exercise_file != 'N/A'%}
+                <video controls>
+                    <source src="{{url_for('static', filename = 'uploads/' + tr.exercise_file)}}" type="video/mp4">
+                </video>      
+                {%else%}
+              <iframe
+                src="https://www.youtube.com/embed/{{tr.exercise_link}}"
+                title="YouTube video"
+                allowfullscreen
+              ></iframe>
+              {%endif%}
+            </div>
+  
+            <div class="text-center py-3">
+                <center><p> 
+                    {%if tr.exercise_name != 'None'%}
+                    <b style="font-size: 20px;">{{tr.exercise_name}}</b><br>
+                    {%endif%}
+                    {%if tr.exercise_description != 'None'%}
+                   <span style="font-weight: 100; margin:auto;">{{tr.exercise_description}}</span><br>
+                   {%endif%}
+                   
+                   <i style="font-size: 10px;">by {{tr.firstname}} {{tr.lastname}} to {{tr.mfirst}} {{tr.mlast}}  on {{tr.date_added}}</i>
+                   
+                </p>
+    
+                </center>
+              <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+
     </div>
-    {%else%}
-    <div class="aboutus">
-        <p> <span>No Exercise</span></p>
-        <p><p class="para">
-            Add a trainer to get exercises
-             </p></p></div>
-    {%endif%}
-    {% endfor %}
+
+</div>
+<div class="dtraining" id="pdiet">
+  <h3>Diet</h3>
+  <a href="/trainer/{{trainer.user_id}}/diet" class="view">view all -></a>
+  <div
+id="carouselMultiItemExample"
+class="carousel slide carousel-dark text-center"
+data-mdb-ride="carousel"
+>
+<div class="d-flex justify-content-center mb-4">
+ 
+  <button
+    class="carousel-control-prev position-relative but"
+    type="button"
+    data-mdb-target="#carouselMultiItemExample"
+    data-mdb-slide="prev"
+    hx-get="{{url_for('diet_home',  id = trainer.user_id, page=diet.prev_num)}}"
+    hx-target="#target2"
+    hx-swap="innerHTML swap:0.8s"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+ 
+
+  
+  <button
+    class="carousel-control-next position-relative but"
+    type="button"
+    data-mdb-target="#carouselMultiItemExample"
+    data-mdb-slide="next"
+    hx-get="{{url_for('diet_home', id=trainer.user_id, page=diet.next_num)}}"
+    hx-target="#target2"
+    hx-swap="innerHTML swap:0.8s"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+</button>
+
+
+
+</div>
+
+   
+
+
+<div class="carousel-inner py-4">
+   
+  <div class="carousel-item active" >  
+      
+    <div class="container" id="target2">
+{%include 'diettrainhome.html'%}
+
+</div> 
+</div>
+</div>
+
+{% for ti in modal %}
+
+<div
+  class="modal fade"
+  id="d{{ti.diet_id}}"
+  data-mdb-backdrop="static"
+  data-mdb-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" id="diet_modal">
+      <div class="modal-header">
+        <div class="modal-title" id="staticBackdropLabel">
+          <b><span style="font-size: 25px; font-weight: 500;" >{{ti.diet_name}}</span></b>
+          <br>
+          <i style="font-size: 10px; font-weight:50;">valid from {{ti.start_date}} to {{ti.end_date}}</i> 
+        </div>
+          
+        
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+       </div>
+      <div class="modal-body">
+        
+        <img class="normal" src="{{url_for('static', filename = 'uploads/' + ti.diet_file)}}" onclick="openf(this.src)" alt="">
+        
+        <div>
+         {{ti.diet_description|safe}}</div></div>
+      <div class="modal-footer">
+        <i style="font-size: 10px; font-weight:50; margin-right: 80px;">By {{ti.firstname}} {{ti.lastname}} to {{ti.mfirst}} {{ti.mlast}} on {{ti.date_added}}</i>
+        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
     </div>
+  </div>
+</div>
+<span onclick="closef()">
+  <div class="full" id="fullbox">
+    <img src="" alt="" id="fullimg">
+   
+    </div></span>
+{%endfor%}
+
+  </div>
 
 </div>
     <!-- Contact us -->

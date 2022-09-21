@@ -1,0 +1,43 @@
+
+  <!-- Inner -->
+  
+  
+  
+        <div class="container" id="target">
+          <h3 style="margin-top: -80px;">Premium Training</h3> 
+            <a href="/trainer/{{trainer.user_id}}/premiumworkout" class="view">view all -></a>
+  <div class="row">
+    {%for fr in data%}
+    <div class="col-lg-4">
+      <div
+        class="bg-image hover-overlay ripple shadow-1-strong rounded"
+        data-ripple-color="light"
+      >
+      {%if fr.exercise_file != 'N/A'%}
+      <img
+      src="{{url_for('static', filename = 'uploads/' + fr.exercise_thumbnail + '.jpg')}}"
+      class="w-100" style="max-height: 200px; object-fit: cover; margin: 2px;"
+    />
+      {%else%}
+        <img
+          src="https://img.youtube.com/vi/{{fr.exercise_thumbnail}}/maxresdefault.jpg"
+          class="w-100" style="max-height: 200px; object-fit: cover; margin: 2px;"
+        />
+        {%endif%}
+        <a href="#!" data-mdb-toggle="modal" data-mdb-target="#f{{fr.exercise_thumbnail}}">
+            
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.2);"></div>
+          </a>
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+        </div>
+     
+<!-- </section> -->
+<!-- Section: Images -->
+
+<!-- Section: Modals -->
+<!-- <section class=""> -->
+  <!-- Modal 1 -->
+  

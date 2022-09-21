@@ -9,6 +9,20 @@
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap">
+    <link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css"
+rel="stylesheet"
+/>
 </head>
 <body>
     <!-- Header -->
@@ -32,7 +46,7 @@
         <ul class="navlist">
             <li><a class="active" href="/member/{{user.user_id}}">Home</a></li>
             <li><a href="/member/{{user.user_id}}#trainer">Trainer</a></li>
-            <li><a href="/member/{{user.user_id}}#pexercises">Premium Exercise</a></li>
+            <li><a href="/member/{{user.user_id}}/premium/all">Premium Exercise</a></li>
             <li><a href="/#diet">Diet</a></li>
             <li><a href="">Help</a></li>
             <li class="dropdown"><a class="dropbtn" href=""><i class="fas fa-user"></i></a>
@@ -57,18 +71,15 @@
      <!-- About section -->
      
      <div class="about" id="trainer" data-aos="fade-in">
-        {% for mem in member%}
+        
         {%if not mem.trainer_id %}
         <div class="about_content"> 
-
-            
             <div class="aboutus">
                 <p> <span>No Trainer</span></p>
                 <p><p class="para">
                     To add a new trainer <a href="/member/{{user.user_id}}/trainer">click here</a> 
                      </p></p></div></div>
                      {% endif %}
-                     {% endfor %} 
                      {% for train in trainer %}
              <div class="about_content"> 
             <div class="about_img">
@@ -97,78 +108,116 @@
 </div> <!-- End of about section -->
 
 <!-- Training -->
-<div class="training" id="pexercises" data-aos="fade-up">
-    <h3>Exercise</h3>
-    {% for ex in exercise %} 
-    {% if ex %}
-    <a href="/" class="view">view all -></a>
-    <div class="scroll snap">
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/1.jpg" alt="">
-            <p class="title">short title</p>
-        </div>
-        </div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/2.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/3.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/4.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/5.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
+<div class="training" id="pexercises">
+    <h3>Premium Exercise</h3>
+    <a href="/member/{{user.user_id}}/premium/all" class="view">view all -></a>
+    <div
+    id="carouselMultiItemExample"
+    class="carousel slide carousel-dark text-center"
+    data-mdb-ride="carousel"
+    >
+    <div class="d-flex justify-content-center mb-4">
+       
+        <button
+          class="carousel-control-prev position-relative but"
+          type="button"
+          data-mdb-target="#carouselMultiItemExample"
+          data-mdb-slide="prev"
+          hx-get="{{url_for('member', id=user.user_id, page = free.prev_num)}}"
+          hx-target="#target"
+          hx-swap="innerHTML swap:0.8s"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+       
+    
         
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/1.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/2.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/3.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/4.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
-        <div class="element">
-            <div class="image">
-            <img src="/static/assets/5.jpg" alt="">
-            <p class="title">short title</p>
-        </div></div>
+        <button
+          class="carousel-control-next position-relative but"
+          type="button"
+          data-mdb-target="#carouselMultiItemExample"
+          data-mdb-slide="next"
+          hx-get="{{url_for('member', id=user.user_id,  page = free.next_num)}}"
+          hx-target="#target"
+          hx-swap="innerHTML swap:0.8s"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+      </button>
+    
+    
+     
+      </div>
+    
+         
+      
+    
+      <div class="carousel-inner py-4">
+         
+        <div class="carousel-item active" >  
+            
+            <div class="container">        
+    {%include 'memberpartial.html'%}
+    
+            </div>
     </div>
-    {%else%}
-    <div class="aboutus">
-        <p> <span>No Exercise</span></p>
-        <p><p class="para">
-            Add a trainer to get exercises
-             </p></p></div>
-    {%endif%}
-    {% endfor %}
     </div>
+    
+    
+    
+        {%for tr in modal%}
+          <div
+            class="modal fade"
+            id="f{{tr.exercise_thumbnail}}"
+            tabindex="-1"
+            aria-labelledby="exampleModal1Label"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="ratio ratio-16x9">
+                    {%if tr.exercise_file != 'N/A'%}
+                    <video controls>
+                        <source src="{{url_for('static', filename = 'uploads/' + tr.exercise_file)}}" type="video/mp4">
+                    </video>      
+                    {%else%}
+                  <iframe
+                    src="https://www.youtube.com/embed/{{tr.exercise_link}}"
+                    title="YouTube video"
+                    allowfullscreen
+                  ></iframe>
+                  {%endif%}
+                </div>
+      
+                <div class="text-center py-3">
+                    <center><p> 
+                        {%if tr.exercise_name != 'None'%}
+                        <b style="font-size: 20px;">{{tr.exercise_name}}</b><br>
+                        {%endif%}
+                        {%if tr.exercise_description != 'None'%}
+                       <span style="font-weight: 100; margin:auto;">{{tr.exercise_description}}</span><br>
+                       {%endif%}
+                       
+                       <i style="font-size: 10px;"> by {{tr.tfirst}} {{tr.tlast}} to {{tr.firstname}} {{tr.lastname}} on {{tr.date_added}}</i>
+                       
+                    </p>
+        
+                    </center>
+                  <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {%endfor%}
+    
+        </div>
 
 </div>
     <!-- Contact us -->
-    <div class="contact" id="contact" data-aos="fade-up">
+    <div class="contact" id="contact">
         <h3>Contact Us</h3>
         <div class="form_wrapper">
             <form class="form">
@@ -201,7 +250,12 @@
         </div>
         <p class="footer-c">gymonline © 2022</p>
     </footer>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- MDB -->
+<script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
+></script>
     <script src="/static/js/easy_background.js"></script>
 
     <script>
