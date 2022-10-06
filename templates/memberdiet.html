@@ -1,0 +1,87 @@
+{%extends 'layout.html'%}
+{%block body%}
+<center>
+    <div style="width: 350px;">
+        <div class="form-outline">
+            <input name="search" type="search" id="form1" class="form-control" placeholder="search" aria-label="Search"
+                hx-get="/member/{{user.user_id}}/diet" hx-trigger="keyup changed delay:500ms" hx-target="#target" />
+        </div>
+    </div>
+</center>
+
+
+<!-- Carousel wrapper -->
+<div id="carouselMultiItemExample" class="carousel slide carousel-dark text-center" data-mdb-ride="carousel">
+    <!-- Controls -->
+
+    <!-- Inner -->
+    <div class="carousel-inner py-4">
+        <!-- Single item -->
+        <div class="carousel-item active">
+            <div class="container" id="target">
+                {%include 'memberdietpage.html'%}
+            </div>
+        </div>
+
+        <!-- Single item -->
+
+    </div>
+    <!-- Inner -->
+</div>
+<!-- Carousel wrapper -->
+
+{% for ti in modal %}
+
+<div class="modal fade" id="d{{ti.diet_id}}" data-mdb-backdrop="static" data-mdb-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content" id="diet_modal">
+            <div class="modal-header">
+                <div class="modal-title" id="staticBackdropLabel">
+                    {% if ti.start_date > today %}<i style="margin-left: 3px;"
+                        class="fas fa-clock-rotate-left completedv"></i>
+                    {%endif%}
+                    {% if ti.end_date < today %}<i style="margin-left: 3px;"
+                        class="fa-regular fa-square-check completed"></i>
+                        {%endif%}
+                        {% if (ti.start_date <= today) and (ti.end_date> today) %}<i style="margin-left: 3px;"
+                                class="fas fa-spinner completedp"></i>
+                            {%endif%}
+                            <b><span style="font-size: 25px; font-weight: 500;">{{ti.diet_name}}</span></b>
+                            <br>
+                            <i style="font-size: 10px; font-weight:50;">valid from {{ti.start_date}} to
+                                {{ti.end_date}}</i>
+                </div>
+
+
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <img class="normal" src="{{url_for('static', filename = 'uploads/' + ti.diet_file)}}"
+                    onclick="openf(this.src)" alt="">
+
+                <div>
+                    {{ti.diet_description|safe}}</div>
+            </div>
+            <div class="modal-footer">
+                <i style="font-size: 10px; font-weight:50; margin-right: 80px;">By {{ti.firstname}} {{ti.lastname}} to
+                    {{ti.mfirst}} {{ti.mlast}} on {{ti.date_added}}</i>
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<span onclick="closef()">
+    <div class="full" id="fullbox">
+        <img src="" alt="" id="fullimg">
+
+    </div>
+</span>
+
+{%endfor%}
+
+
+{%endblock%}

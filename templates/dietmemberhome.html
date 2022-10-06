@@ -1,0 +1,35 @@
+<!-- Inner -->
+<div class="row">
+    {%for di in diet.items%}
+    <div class="col-lg-4">
+        <div class="card">
+            <img src="{{url_for('static', filename = 'uploads/' + di.diet_file)}}" class="card-img-top"
+                alt="{{di.diet_name}}" style="max-height: 250px; height: 250px; object-fit: cover;" />
+            <div class="card-body">
+                {% if di.start_date > today %} <span class="completedv">Pending <i style="margin-left: 3px;"
+                        class="fas fa-clock-rotate-left"></i></span>
+                {%endif%}
+                {% if di.end_date < today %} <span class="completed">Completed <i style="margin-left: 3px;"
+                        class="fa-regular fa-square-check"></i></span>
+                    {%endif%}
+                    {% if (di.start_date <= today) and (di.end_date> today) %} <span class="completedp">In progress...
+                            <i style="margin-left: 3px;" class="fas fa-spinner"></i></span>
+                        {%endif%}
+                        <h5 class="card-title">{{di.diet_name}}</h5>
+                        <p class="card-text" style="font-weight: 100;">
+                            Valid From {{di.start_date}} to {{di.end_date}}
+                        </p>
+                        <a href="#!" class="btn btn-primary" data-mdb-toggle="modal"
+                            data-mdb-target="#d{{di.diet_id}}">View</a>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+</div>
+
+<!-- </section> -->
+<!-- Section: Images -->
+
+<!-- Section: Modals -->
+<!-- <section class=""> -->
+<!-- Modal 1 -->

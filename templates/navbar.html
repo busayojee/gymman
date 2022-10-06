@@ -2,16 +2,16 @@
 <li><a class="active" href="/member/{{user.user_id}}">Home</a></li>
 <li><a href="/member/{{user.user_id}}#trainer">Trainer</a></li>
 <li><a href="/member/{{user.user_id}}/premium/all">Premium Exercise</a></li>
-<li><a href="/#diet">Diet</a></li>
+<li><a href="/member/{{user.user_id}}/diet">Diet</a></li>
 <li><a href="">Help</a></li>
 <li class="dropdown"><a class="dropbtn" href=""><i class="fas fa-user"></i></a>
-<div class="contentm">
-    <p></p>
-    <p> Hello {{user.firstname}} </p>
-    <p><a href="/member/{{user.user_id}}/profile" ><i class="fas fa-user"></i>  My profile </a></p>
-    <button><a href="/">Logout</a></button>
-    <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
-</div>
+    <div class="contentm">
+        <p></p>
+        <p> Hello {{user.firstname}} </p>
+        <p><a href="/member/{{user.user_id}}/profile"><i class="fas fa-user"></i> My profile </a></p>
+        <button><a href="/logout">Logout</a></button>
+        <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
+    </div>
 </li>
 {% elif session['trainer'] == True %}
 <li><a class="active" href="/trainer/{{trainer.user_id}}">Home</a></li>
@@ -19,34 +19,35 @@
 <li class="dropdown"><a class="dropbtn" href="/trainer/{{trainer.user_id}}#pexercises">Exercises</a>
     <div class="contentm">
         <p></p>
-        <p><a href="/trainer/{{trainer.user_id}}/freeworkout" ><i class="fas fa-user"></i>  Free workouts </a></p>
-        <p><a href="/trainer/{{trainer.user_id}}/premiumworkout" ><i class="fas fa-user"></i>  Premium workouts </a></p>
-        
+        <p><a href="/trainer/{{trainer.user_id}}/freeworkout"><i class="fas fa-user"></i> Free workouts </a></p>
+        <p><a href="/trainer/{{trainer.user_id}}/premiumworkout"><i class="fas fa-user"></i> Premium workouts </a></p>
+
         <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
     </div>
 </li>
 <li><a href="/trainer/{{trainer.user_id}}/diet">Diet</a></li>
-<li><a href="">Help</a></li>
+<li><a href="/trainer/{{trainer.user_id}}/schedule"><i class="fa-solid fa-calendar-days"></i></a></li>
 <li class="dropdown"><a class="dropbtn" href=""><i class="fas fa-user"></i></a>
-<div class="contentm">
-    <p></p>
-    <p> Hello {{trainer.firstname}} </p>
-    <p><a href="/trainer/{{trainer.user_id}}/profile" ><i class="fas fa-user"></i>  My profile </a></p>
-    <button><a href="/logout">Logout</a></button>
-    <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
-</div>
+    <div class="contentm">
+        <p></p>
+        <p> Hello {{trainer.firstname}} </p>
+        <p><a href="/trainer/{{trainer.user_id}}/profile"><i class="fas fa-user"></i> My profile </a></p>
+        <button><a href="/logout">Logout</a></button>
+        <!-- <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p> -->
+    </div>
 </li>
 {% else %}
 <li><a class="active" href="/">Home</a></li>
-            <li><a href="/#about">About</a></li>
-            <li><a href="/#training">Free workouts</a></li>
-            <li><a href="/#contact">Contact Us</a></li>
-            <li><a href="">Help</a></li>
-            <li class="dropdown"><a class="dropbtn" href="/login"><i class="fas fa-user"></i></a>
-            <div class="content">
-                <p style="margin: 0.5rem;"></p>
-                <button><a style="text-decoration: none; font-size: 12px;" href="/login">login</a></button>
-                <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p>
-            </div>
-            </li>
+<li><a href="/#about">About</a></li>
+<li><a href="/#training">Free workouts</a></li>
+<li><a href="/#contact">Contact Us</a></li>
+<li><a href="">Help</a></li>
+<li class="dropdown"><a class="dropbtn" href="/login"><i class="fas fa-user"></i></a>
+    <div class="content">
+        <p style="margin: 0.5rem;"></p>
+        <button><a style="text-decoration: none; font-size: 12px;" href="/login">login</a></button>
+        <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup
+                here</a></p>
+    </div>
+</li>
 {% endif %}

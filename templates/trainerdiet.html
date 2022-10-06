@@ -2,150 +2,154 @@
 {%block body%}
 <center>
   <div style="width: 350px;">
-<div class="form-outline">
-  <input name="search" type="search" id="form1" class="form-control" placeholder="search" aria-label="Search"
-  hx-get = "/trainer/{{trainer.user_id}}/diet"
-  hx-trigger="keyup changed delay:500ms"      
-  hx-target="#target"
-  />
-</div></div></center>
+    <div class="form-outline">
+      <input name="search" type="search" id="form1" class="form-control" placeholder="search" aria-label="Search"
+        hx-get="/trainer/{{trainer.user_id}}/diet" hx-trigger="keyup changed delay:500ms" hx-target="#target" />
+    </div>
+  </div>
+</center>
 <center><button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#staticBackdrop">
     Upload
   </button></center>
-  <div
-  class="modal fade"
-  id="staticBackdrop"
-  data-mdb-backdrop="static"
-  data-mdb-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="staticBackdrop" data-mdb-backdrop="static" data-mdb-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title" id="staticBackdropLabel">Upload Diet</h3>
-            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">Upload Diet</h3>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+
+
+        <form action="/trainer/{{trainer.user_id}}/diet" method="post" enctype="multipart/form-data">
+
+
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <label class="form-check-label">Member</label>
+              <select class="select" name="member" required>
+                <option value=""></option>
+                {%for memb in members%}
+                <option value="{{memb.member_id}}">{{memb.firstname}} {{memb.lastname}}</option>
+                {%endfor%}
+
+
+              </select>
+
+            </div>
           </div>
-    
-        <div class="modal-body">
+          <div class="form-outline mb-4">
+            <label class="form-check-label">Diet Image:</label>
+            <input type="file" name="diet_file">
 
-        
-<form action="/trainer/{{trainer.user_id}}/diet" method="post" enctype="multipart/form-data">
-                 
+          </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <label class="form-check-label" >Member</label> 
-          <select class="select" name="member" required>
-            <option value=""></option>
-            {%for memb in members%}
-            <option value="{{memb.member_id}}">{{memb.firstname}} {{memb.lastname}}</option>
-            {%endfor%}
-           
-        
-          </select>
+          <div class="md-form">
+            <label for="form7">Diet Name</label>
+            <input name="name" type="text" id="form3Example97" class="form-control form-control-lg" value="None"
+              required />
 
+          </div>
+          <div class="md-form">
+            <label for="form7">Start Date</label>
+            <input name="startdate" type="date" id="form3Example97" class="form-control form-control-lg" value="None"
+              required />
+
+          </div>
+          <div class="md-form">
+            <label for="form7">End Date</label>
+            <input name="enddate" type="date" id="form3Example97" class="form-control form-control-lg" value="None"
+              required />
+
+          </div>
+
+          <div class="md-form">
+            <label for="form7">Diet description</label>
+            <textarea name="description" id="form7" class="md-textarea form-control" rows="3" value="">None</textarea>
+            <script>
+              CKEDITOR.replace('description');
+            </script>
+          </div>
+
+      </div>
+
+
+      <div class="modal-footer">
+
+        <div class="d-flex justify-content-end pt-3">
+          <button type="submit" class="btn btn-success btn-lg ms-2">Upload</button>
         </div>
-      </div>              
-    <div class="form-outline mb-4">
-                    <label class="form-check-label" >Diet Image:</label>   
-                      <input type="file" name = "diet_file">
-                  
-                  </div>
-                  
-                  <div class="md-form">
-                    <label for="form7">Diet Name</label>
-                    <input name="name" type="text" id="form3Example97" class="form-control form-control-lg" value="None" required/>
-                  
-                  </div>
-                  <div class="md-form">
-                    <label for="form7">Start Date</label>
-                    <input name="startdate" type="date" id="form3Example97" class="form-control form-control-lg" value="None" required/>
-                  
-                  </div>
-                  <div class="md-form">
-                    <label for="form7">End Date</label>
-                    <input name="enddate" type="date" id="form3Example97" class="form-control form-control-lg" value="None" required/>
-                  
-                  </div>
-                 
-                  <div class="md-form">
-                    <label for="form7">Diet description</label>
-                    <textarea name="description" id="form7" class="md-textarea form-control" rows="3" value="">None</textarea>
-                    <script>
-                        CKEDITOR.replace( 'description' );
-                </script>
-                  </div>
-
-                </div>
-                 
-                 
-                  <div class="modal-footer">
-  
-                  <div class="d-flex justify-content-end pt-3">
-                 <button type="submit" class="btn btn-success btn-lg ms-2">Upload</button> 
-                  </div></div>
-                     </form></div></div></div>
-                    
-                     <!-- Carousel wrapper -->
-<div
-id="carouselMultiItemExample"
-class="carousel slide carousel-dark text-center"
-data-mdb-ride="carousel"
->
-<!-- Controls -->
-
-<!-- Inner -->
-<div class="carousel-inner py-4">
-  <!-- Single item -->
-  <div class="carousel-item active">
-    <div class="container" id="target">
-     {%include 'traindietpage.html'%}
+      </div>
+      </form>
     </div>
   </div>
-
-  <!-- Single item -->
- 
 </div>
-<!-- Inner -->
+
+<!-- Carousel wrapper -->
+<div id="carouselMultiItemExample" class="carousel slide carousel-dark text-center" data-mdb-ride="carousel">
+  <!-- Controls -->
+
+  <!-- Inner -->
+  <div class="carousel-inner py-4">
+    <!-- Single item -->
+    <div class="carousel-item active">
+      <div class="container" id="target">
+        {%include 'traindietpage.html'%}
+      </div>
+    </div>
+
+    <!-- Single item -->
+
+  </div>
+  <!-- Inner -->
 </div>
 <!-- Carousel wrapper -->
 
 {% for ti in modal %}
 
-<div
-  class="modal fade"
-  id="d{{ti.diet_id}}"
-  data-mdb-backdrop="static"
-  data-mdb-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="d{{ti.diet_id}}" data-mdb-backdrop="static" data-mdb-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content" id="diet_modal">
       <div class="modal-header">
         <div class="modal-title" id="staticBackdropLabel">
-          <b><span style="font-size: 25px; font-weight: 500;" >{{ti.diet_name}}</span></b>
-          <br>
-          <i style="font-size: 10px; font-weight:50;">valid from {{ti.start_date}} to {{ti.end_date}}</i> 
+
+          {% if ti.start_date > today %}<i style="margin-left: 3px;" class="fas fa-clock-rotate-left completedv"></i>
+          {%endif%}
+          {% if ti.end_date < today %}<i style="margin-left: 3px;" class="fa-regular fa-square-check completed"></i>
+            {%endif%}
+            {% if (ti.start_date <= today) and (ti.end_date> today) %}<i style="margin-left: 3px;"
+                class="fas fa-spinner completedp"></i>
+              {%endif%}
+              <b><span style="font-size: 25px; font-weight: 500;">{{ti.diet_name}}</span></b>
+              <br>
+              <i style="font-size: 10px; font-weight:50;">valid from {{ti.start_date}} to {{ti.end_date}}</i>
         </div>
-          
-        
+
+
         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-       </div>
+      </div>
       <div class="modal-body">
-        
-        <img class="normal" src="{{url_for('static', filename = 'uploads/' + ti.diet_file)}}" onclick="openf(this.src)" alt="">
-        
+
+        <img class="normal" src="{{url_for('static', filename = 'uploads/' + ti.diet_file)}}" onclick="openf(this.src)"
+          alt="">
+
         <div>
-         {{ti.diet_description|safe}}</div></div>
+          {{ti.diet_description|safe}}</div>
+      </div>
       <div class="modal-footer">
-        <i style="font-size: 10px; font-weight:50; margin-right: 80px;">By {{ti.firstname}} {{ti.lastname}} to {{ti.mfirst}} {{ti.mlast}} on {{ti.date_added}}</i>
+        <i style="font-size: 10px; font-weight:50; margin-right: 80px;">By {{ti.firstname}} {{ti.lastname}} to
+          {{ti.mfirst}} {{ti.mlast}} on {{ti.date_added}}</i>
         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        <a href="/trainer/{{trainer.user_id}}/diet/{{ti.diet_id}}/delete" onclick="return confirm('Are you sure?')">
+          <button type="button" class="btn btn-danger">
+            <i class="fas fa-trash"></i>
+          </button></a>
+        <button type="button" class="btn btn-primary" data-mdb-target="#de{{ti.diet_id}}" data-mdb-toggle="modal"
+          data-mdb-dismiss="modal">Edit <i class="fas fa-pen"></i></button>
       </div>
     </div>
   </div>
@@ -153,11 +157,73 @@ data-mdb-ride="carousel"
 <span onclick="closef()">
   <div class="full" id="fullbox">
     <img src="" alt="" id="fullimg">
-   
-    </div></span>
+
+  </div>
+</span>
+<div class="modal fade" id="de{{ti.diet_id}}" data-mdb-backdrop="static" data-mdb-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">Edit Diet</h3>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+
+
+        <form action="/trainer/{{trainer.user_id}}/diet/{{ti.diet_id}}/edit" method="post"
+          enctype="multipart/form-data">
+
+          <div class="form-outline mb-4">
+            <label class="form-check-label">Diet Image:</label>
+            <input type="file" name="diet_file">
+
+          </div>
+
+          <div class="md-form">
+            <label for="form7">Diet Name</label>
+            <input name="name" type="text" id="form3Example97" class="form-control form-control-lg"
+              value="{{ti.diet_name}}" required />
+
+          </div>
+          <div class="md-form">
+            <label for="form7">Start Date</label>
+            <input name="startdate" type="date" id="form3Example97" class="form-control form-control-lg"
+              value="{{ti.start_date}}" required />
+
+          </div>
+          <div class="md-form">
+            <label for="form7">End Date</label>
+            <input name="enddate" type="date" id="form3Example97" class="form-control form-control-lg"
+              value="{{ti.end_date}}" required />
+
+          </div>
+
+          <div class="md-form">
+            <label for="form7">Diet description</label>
+            <textarea name="description2" id="form7" class="md-textarea form-control" rows="3"
+              value="{{ti.diet_description}}">{{ti.diet_description|safe}}</textarea>
+            <script>
+              CKEDITOR.replace('description2');
+            </script>
+          </div>
+
+      </div>
+
+
+      <div class="modal-footer">
+
+        <div class="d-flex justify-content-end pt-3">
+          <button type="submit" class="btn btn-success btn-lg ms-2">Upload</button>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {%endfor%}
 
 
-                   {%endblock%}
-
-
+{%endblock%}

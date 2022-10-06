@@ -1,0 +1,41 @@
+{%for sch in schedule.items%}
+
+{%if schedule.has_next%}
+<tr hx-get="{{url_for('trainer_schedule', id=trainer.user_id, page = schedule.next_num)}}"
+    hx-trigger="revealed delay:1s" hx-swap="afterend">
+    {%else%}
+
+<tr>
+    {%endif%}
+
+    <td>
+        <div class="d-flex align-items-center">
+            {% if sch.profile_image != 'none' %}
+            <img src="{{url_for('static', filename = 'uploads/' + sch.profile_image)}}" alt=""
+                class="rounded-circle schimg" />
+            {% else %}
+            <img src="/static/assets/7.png" alt="" class="rounded-circle schimg" />
+            {% endif %}
+            <div class="ms-3">
+                {%if sch.schedule_date == today%} <p class="fw-bold mb-1">{{sch.firstname}} {{sch.lastname}} <i
+                        class="fas fa-circle" style="font-size: 8px; color: rgb(4, 181, 4);"></i></p>
+                {%else%}
+                <p class="fw-bold mb-1">{{sch.firstname}} {{sch.lastname}}</p>
+                {%endif%}
+            </div>
+        </div>
+    </td>
+    {%if sch.schedule_date < today%} <td>{{sch.schedule_date.strftime("%A %d %B %Y")}} <span
+            style="color: red; font-weight: 200;">!(expired)</span></td>
+        {%else%}
+        <td>{{sch.schedule_date.strftime("%A %d %B %Y")}}</td>
+        {%endif%}
+        <td>{{sch.schedule_time.strftime("%I:%M %p")}}</td>
+        <td><a href="/trainer/{{trainer.user_id}}/schedule/{{sch.schedule_id}}/delete"
+                onclick="return confirm('Are you sure?')">
+                <i style="cursor: pointer;" class="fas fa-trash"></i></a>
+            <a href="#!" data-mdb-toggle="modal" data-mdb-target="#s{{sch.schedule_id}}"><i style="cursor: pointer;"
+                    class="fas fa-edit"></i></a>
+        </td>
+</tr>
+{%endfor%}
