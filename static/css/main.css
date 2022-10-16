@@ -2,7 +2,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* width: 100%; */
     font-family: "Poppins", sans-serif;
+
 }
 
 html {
@@ -11,6 +13,7 @@ html {
 
 body {
     background: #fff;
+    overflow-x: hidden;
 }
 
 h3 {
@@ -19,6 +22,7 @@ h3 {
     letter-spacing: 4px;
     /* text-shadow: 2px 2px #494949, 3px 3px #18cdca; */
     padding-top: 4rem;
+    padding-bottom: 1rem;
 }
 
 /* slideshow */
@@ -672,13 +676,14 @@ textarea {
 .footer {
     margin-top: 7rem;
     padding: 2rem;
+    width: 100%;
     background: #000000;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     min-height: 250px;
     align-items: center;
-    columns: #fff;
+    /* columns: #fff; */
 
 }
 
@@ -932,7 +937,7 @@ textarea {
 }
 
 .schimg {
-    width: 45px;
+    width: 35px;
     height: 45px
 }
 
@@ -962,4 +967,25 @@ textarea {
         height: 20px;
     }
 
+}
+
+.upcoming {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+.upcoming p {
+    font-style: italic;
+}
+
+.upcoming span {
+    font-weight: 100;
+    font-size: 12px;
+}
+
+@media screen and (max-width: 1000px) {
+    .upcoming {
+        padding: 0.5rem;
+    }
 }

@@ -19,15 +19,29 @@
 </head>
 
 <body>
+
   <!-- Header -->
   <div class="main" id="home">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show"
+      style="display: flex; justify-content: space-between;" role="alert">
+
+      {{ message }} <span style="cursor: pointer;" data-mdb-dismiss="alert" aria-label="Close">X</span>
+    </div>
+
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
     <div class="row">
       <!-- Navigation -->
       <div class="navigation">
         <div class="logo">
           <!-- Logo -->
           <a href="/" class="logolink">
-            <p style="font-family: cursive;">gymonline</p>
+            <p style="font-family: cursive;">Victory Gym</p>
           </a>
         </div>
         <!-- End of logo -->
@@ -341,7 +355,7 @@
     <div>
       <a href="/">
         <a href="/">
-          <p> gymonline </p>
+          <p> Victory Gym </p>
         </a> </a>
 
 
@@ -353,7 +367,7 @@
       <a href="#"><i class="fab fa-linkedin"></i></a>
       <a href="#"><i class="fab fa-dribbble"></i></a>
     </div>
-    <p class="footer-c">gymonline © 2022</p>
+    <p class="footer-c">Victory Gym © 2022</p>
   </footer>
 
   <script src="/static/js/easy_background.js"></script>

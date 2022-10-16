@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,34 +9,39 @@
     <link rel="stylesheet" href="/static/css/aos.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
-<link
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-rel="stylesheet"
-/>
-<!-- Google Fonts -->
-<link
-href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-rel="stylesheet"
-/>
-<!-- MDB -->
-<link
-href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css"
-rel="stylesheet"
-/>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<script src="https://cdn.ckeditor.com/4.19.1/basic/ckeditor.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://cdn.ckeditor.com/4.19.1/basic/ckeditor.js"></script>
 </head>
+
 <body>
-   
-  
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show"
+        style="display: flex; justify-content: space-between;" role="alert">
+
+        {{ message }} <span style="cursor: pointer;" data-mdb-dismiss="alert" aria-label="Close">X</span>
+    </div>
+
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+
     <div class="navigationm">
         <div class="logo">
             <!-- Logo -->
             <a href="/" class="logolink">
-                <p style="font-family: cursive;">gymonline</p>
+                <p style="font-family: cursive;">Victory Gym</p>
             </a>
         </div>
         <!-- End of logo -->
@@ -58,21 +64,22 @@ rel="stylesheet"
                     <p>Don't have an account yet? <br> <a style="font-size: 12px; color: rgb(35, 171, 225);" href="/signup">Signup here</a></p>
                 </div>
                 </li> -->
-                {%include 'navbar.html'%}
+            {%include 'navbar.html'%}
         </ul>
         <!-- End of navlist -->
     </div>
 
-    <!-- End of navigation --> 
+    <!-- End of navigation -->
     {% block body%}
     {%endblock%}
     <footer class="footer">
         <div>
             <a href="/">
-                 <a href="/"> <p> gymonline </p>
-                </a>  </a>
-                 
-               
+                <a href="/">
+                    <p> Victory Gym </p>
+                </a> </a>
+
+
         </div>
         <div>
             <a href="#"><i class="fab fa-facebook-square"></i></a>
@@ -81,17 +88,17 @@ rel="stylesheet"
             <a href="#"><i class="fab fa-linkedin"></i></a>
             <a href="#"><i class="fab fa-dribbble"></i></a>
         </div>
-        <p class="footer-c">gymonline © 2022</p>
+        <p class="footer-c">Victory Gym © 2022</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- MDB -->
-<script
-type="text/javascript"
-src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
-></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"></script>
     <script src="/static/js/aos.js"></script>
-    <script src="/static/js/app.js"></script> 
-    <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
-    
+    <script src="/static/js/app.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.8.0"
+        integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc"
+        crossorigin="anonymous"></script>
+
 </body>
+
 </html>

@@ -2,77 +2,174 @@
 
 {%block body%}
 <section class="h-100 gradient-custom-2">
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col col-lg-9 col-xl-7">
-          <div class="card">
-            <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-                
-                <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                    {% if trainer.profile_image != 'none' %}
-                    <img src="{{url_for('static', filename = 'uploads/' + trainer.profile_image)}}"
-                  alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                  style="width: 150px; z-index: 1">
-                 
-                {% else %}
-              
-                <img src="/static/assets/7.png"
-                  alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                  style="width: 150px; z-index: 1">
-                  {% endif %}
-           
-              
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">
+          <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+
+            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+              {% if trainer.profile_image != 'none' %}
+              <img src="{{url_for('static', filename = 'uploads/' + trainer.profile_image)}}"
+                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; z-index: 1">
+
+              {% else %}
+
+              <img src="/static/assets/7.png" alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; z-index: 1">
+              {% endif %}
+
+
               <a href="/trainer/{{trainer.user_id}}/profile/edit" style="z-index: 1;">
-                <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
-            style="z-index: 1;"> 
-           <span style="color: rgb(37, 185, 84); z-index: 1;">Edit Profile</span>
-          </button>
+                <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" style="z-index: 1;">
+                  <span style="color: rgb(37, 185, 84); z-index: 1;">Edit Profile</span>
+                </button>
               </a>
             </div>
-              
-              <div class="ms-3" style="margin-top: 130px;">
-                <h5>{{trainer.firstname}} {{trainer.lastname}}</h5>
-                <p>{{trainer.country}}</p>
+
+            <div class="ms-3" style="margin-top: 130px;">
+              <h5>{{trainer.firstname}} {{trainer.lastname}}</h5>
+              <p>{{trainer.country}}</p>
+            </div>
+          </div>
+          <div class="p-4 text-black" style="background-color: #f8f9fa;">
+            <div class="d-flex justify-content-end text-center py-1">
+              <div>
+                <p class="mb-1 h5">{{img}}</p>
+                <p class="small text-muted mb-0">Photos</p>
+              </div>
+              <div class="px-3">
+                <a href="/trainer/{{trainer.user_id}}/members/view">
+                  <p class="mb-1 h5">{{memb}}</p>
+                  <p class="small text-muted mb-0">Members</p>
+                </a>
+              </div>
+              <div>
+                <p class="mb-1 h5">478</p>
+                <p class="small text-muted mb-0">Following</p>
               </div>
             </div>
-            <div class="p-4 text-black" style="background-color: #f8f9fa;">
-              <div class="d-flex justify-content-end text-center py-1">
-                <div>
-                  <p class="mb-1 h5">{{img}}</p>
-                  <p class="small text-muted mb-0">Photos</p>
-                </div>
-                <div class="px-3">
-                  <a href="/trainer/{{trainer.user_id}}/members/view"><p class="mb-1 h5">{{memb}}</p>
-                  <p class="small text-muted mb-0">Members</p></a>
-                </div>
-                <div>
-                  <p class="mb-1 h5">478</p>
-                  <p class="small text-muted mb-0">Following</p>
-                </div>
+          </div>
+          <div class="card-body p-4 text-black">
+            <div class="mb-5">
+              <p class="lead fw-normal mb-1">About</p>
+              <div class="p-4" style="background-color: #f8f9fa;">
+                <p class="font-italic mb-1">{{trainer.profile}}</p>
+
               </div>
             </div>
-            <div class="card-body p-4 text-black">
-              <div class="mb-5">
-                <p class="lead fw-normal mb-1">About</p>
-                <div class="p-4" style="background-color: #f8f9fa;">
-                  <p class="font-italic mb-1">{{trainer.profile}}</p>
-                  
+            <div class="mb-5">
+              <p class="lead fw-normal mb-1"><a href="/trainer/{{trainer.user_id}}/schedule"
+                  style="text-decoration: none; color: black;">Schedule</a></p>
+
+              <div class="tablediv">
+                <table class="table tables">
+                  <thead class="table-primary">
+                    <tr>
+                      <th scope="col" class="th-sm">Name</th>
+                      <th scope="col" class="th-sm">Date</th>
+                      <th scope="col" class="th-sm">Time</th>
+                      <th scope="col" class="th-sm"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="t">
+                    {%for sch in data%}
+
+
+
+                    <tr>
+
+                      <td>
+                        <div class="d-flex align-items-center">
+                          {% if sch.profile_image != 'none' %}
+                          <img src="{{url_for('static', filename = 'uploads/' + sch.profile_image)}}" alt=""
+                            class="rounded-circle schimg" />
+                          {% else %}
+                          <img src="/static/assets/7.png" alt="" class="rounded-circle schimg" />
+                          {% endif %}
+
+                          {%if sch.schedule_date == today%} <p class="fw-bold mb-1">{{sch.firstname}}
+                            {{sch.lastname}} <i class="fas fa-circle"
+                              style="font-size: 8px; color: rgb(4, 181, 4);"></i></p>
+                          {%else%}
+                          <p class="fw-bold mb-1">{{sch.firstname}} {{sch.lastname}}</p>
+                          {%endif%}
+
+                        </div>
+                      </td>
+
+                      <td>{{sch.schedule_date.strftime("%A %d %B %Y")}}</td>
+
+                      <td>{{sch.schedule_time.strftime("%I:%M %p")}}</td>
+                      <td><a href="/trainer/{{trainer.user_id}}/schedule/{{sch.schedule_id}}/delete"
+                          onclick="return confirm('Are you sure?')">
+                          <i style="cursor: pointer;" class="fas fa-trash"></i></a>
+                        <a href="#!" data-mdb-toggle="modal" data-mdb-target="#pt{{sch.schedule_id}}"><i
+                            style="cursor: pointer;" class="fas fa-edit"></i></a>
+                      </td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+              </div>
+              {%for sc in data%}
+              <div class="modal fade" id="pt{{sc.schedule_id}}" data-mdb-backdrop="static" data-mdb-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title" id="staticBackdropLabel">Edit Schedule</h3>
+                      <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+
+                      <form action="/trainer/{{trainer.user_id}}/schedule/{{sc.schedule_id}}/edit" method="post"
+                        enctype="multipart/form-data">
+                        <div class="md-form">
+                          <label for="form7">Date</label>
+                          <input name="date" type="date" id="form3Example97" class="form-control form-control-lg"
+                            value="{{sc.schedule_date}}" required />
+
+                        </div>
+                        <div class="md-form">
+                          <label for="form7">Time</label>
+                          <input name="time" type="time" id="form3Example97" class="form-control form-control-lg"
+                            value="{{sc.schedule_time}}" required />
+
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+
+                      <div class="d-flex justify-content-end pt-3">
+                        <button type="submit" class="btn btn-success btn-lg ms-2">Upload</button>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
                 </div>
               </div>
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <p class="lead fw-normal mb-0">Recent photos</p>
-                <p class="mb-0"><a href="/trainer/{{trainer.user_id}}/image/upload" class="text-muted">Add Image</a></p>
-              </div>
-              
-             {%include 'trainerimageresult.html'%}
-              
-            
- 
+              {%endfor%}
+
             </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <p class="lead fw-normal mb-0">Recent photos</p>
+              <p class="mb-0"><a href="/trainer/{{trainer.user_id}}/image/upload" class="text-muted">Add Image</a></p>
+            </div>
+
+            {%include 'trainerimageresult.html'%}
+
+
+
           </div>
         </div>
       </div>
     </div>
-  </section>
-  
+  </div>
+</section>
+
 {% endblock %}

@@ -19,15 +19,29 @@
 </head>
 
 <body>
+
   <!-- Header -->
   <div class="main" id="home">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show"
+      style="display: flex; justify-content: space-between;" role="alert">
+
+      {{ message }} <span style="cursor: pointer;" data-mdb-dismiss="alert" aria-label="Close">X</span>
+    </div>
+
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
     <div class="row">
       <!-- Navigation -->
       <div class="navigation">
         <div class="logo">
           <!-- Logo -->
           <a href="/" class="logolink">
-            <p style="font-family: cursive;">gymonline</p>
+            <p style="font-family: cursive;">Victory Gym</p>
           </a>
         </div>
         <!-- End of logo -->
@@ -77,7 +91,7 @@
         </p>
       </div>
     </div>
-    {% endif %}
+    {% else %}
     {% for train in trainer %}
     <div class="about_content">
       <div class="about_img">
@@ -101,10 +115,22 @@
       </div> <!-- End of aboutus -->
 
       </p>
-
-
-
-    </div> {%endfor%}
+      <div class="upcoming">
+        <p><b>Upcoming meetings</b></p>
+        {%for sch in data%}
+        {%if sch.schedule_date==today%}
+        <span>{{sch.schedule_date.strftime("%A %d %B %Y")}}
+          @
+          {{sch.schedule_time.strftime("%I:%M %p")}} <i class="fas fa-circle"
+            style="font-size: 8px; color: rgb(4, 181, 4);"></i></span>
+        {%else%}
+        <span>{{sch.schedule_date.strftime("%A %d %B %Y")}}
+          @
+          {{sch.schedule_time.strftime("%I:%M %p")}}</span>
+        {%endif%}
+        {%endfor%}
+      </div>
+    </div> {%endfor%}{% endif %}
     <!-- End of about content -->
   </div> <!-- End of about section -->
 
@@ -303,9 +329,12 @@
         <input type="tel" placeholder="Contact">
         <textarea rows="4" placeholder="Message"></textarea>
         <input type="submit" class="btn" value="Submit">
-      </form> <!-- End of form -->
-    </div> <!-- End of form wrapper -->
-  </div> <!-- End of contact us section -->
+      </form>
+      <!-- End of form -->
+    </div>
+    <!-- End of form wrapper -->
+  </div>
+  <!-- End of contact us section -->
 
 
 
@@ -314,7 +343,7 @@
     <div>
       <a href="/">
         <a href="/">
-          <p> gymonline </p>
+          <p> Victory Gym </p>
         </a> </a>
 
 
@@ -326,7 +355,7 @@
       <a href="#"><i class="fab fa-linkedin"></i></a>
       <a href="#"><i class="fab fa-dribbble"></i></a>
     </div>
-    <p class="footer-c">gymonline © 2022</p>
+    <p class="footer-c">Victory Gym © 2022</p>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- MDB -->

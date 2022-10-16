@@ -2,82 +2,99 @@
 
 {% block body %}
 <section class="vh-100" style="background-color: #f4f5f7;">
-    <div class="container py-5 h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col col-lg-6 mb-4 mb-lg-0">
-          <div class="card mb-3" style="border-radius: .5rem;">
-            <div class="row g-0">
-              <div class="col-md-4 gradient-custom text-center text-white"
-                style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                {% if user.profile_image != 'none'%}
-                <img src="{{url_for('static', filename = 'uploads/' + user.profile_image)}}"
-                  alt="Avatar" class="img-fluid my-5" style="width: 140px; height: 120px; object-fit: contain; " />
-                  {%else%}
-                  <img src="/static/assets/7.png"
-                  alt="Generic placeholder image" class="img-fluid my-5"
-                  style="width: 120px; height: 120px; object-fit: contain;"/>
-                  {%endif%}
-                <h5>{{user.firstname}} {{user.lastname}}</h5>
-                <p>{{user.gender}}</p>
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-6 mb-4 mb-lg-0">
+        <div class="card mb-3" style="border-radius: .5rem;">
+          <div class="row g-0">
+            <div class="col-md-4 gradient-custom text-center text-white"
+              style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+              {% if user.profile_image != 'none'%}
+              <img src="{{url_for('static', filename = 'uploads/' + user.profile_image)}}" alt="Avatar"
+                class="img-fluid my-5" style="width: 140px; height: 120px; object-fit: contain; " />
+              {%else%}
+              <img src="/static/assets/7.png" alt="Generic placeholder image" class="img-fluid my-5"
+                style="width: 120px; height: 120px; object-fit: contain;" />
+              {%endif%}
+              <h5>{{user.firstname}} {{user.lastname}}</h5>
+              <p>{{user.gender}}</p>
               {%if session['loggedin'] == True %}
-                <a href="/member/{{user.user_id}}/profile/edit" style="text-decoration: none; color: #f4f5f7; "><i class="far fa-edit mb-5"></i> Edit profile</a>
-                {%else%}
-                <p></p>
-                {% endif %}
-              </div>
-              <div class="col-md-8">
-                <div class="card-body p-4">
-                  <h6>Profile</h6>
-                  <hr class="mt-0 mb-4">
-                  <div class="row pt-1">
-                    <div class="col-6 mb-3">
-                      <h6>Email</h6>
-                      <p class="text-muted">{{user.email}}</p>
-                    </div>
-                    <div class="col-6 mb-3">
-                      <h6>Phone</h6>
-                      <p class="text-muted">{{user.phone}}</p>
-                    </div>
+              <a href="/member/{{user.user_id}}/profile/edit" style="text-decoration: none; color: #f4f5f7; "><i
+                  class="far fa-edit mb-5"></i> Edit profile</a>
+              {%else%}
+              <p></p>
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <div class="card-body p-4">
+                <h6>Profile</h6>
+                <hr class="mt-0 mb-4">
+                <div class="row pt-1">
+                  <div class="col-6 mb-3">
+                    <h6>Email</h6>
+                    <p class="text-muted">{{user.email}}</p>
                   </div>
-                  
-                  <div class="row pt-1">
-                    <div class="col-6 mb-3">
-                      <h6>Trainer</h6>
-                      {%if session['loggedin'] == True %}
-                      <a href="/member/{{user.user_id}}/trainer/{{usertrain.user_id}}/view"><p class="text-muted"> {{usertrain.firstname}} {{usertrain.lastname}} </p></a>
-                      {%else%}
-                      <a href="/trainer/{{trainer.user_id}}/profile"><p class="text-muted"> {{trainer.firstname}} {{trainer.lastname}} </p></a>
-            
-                      {%endif%}
-                    </div>
-                    <!-- <div class="col-6 mb-3">
-                      <h6>Most Viewed</h6>
-                      <p class="text-muted">Dolor sit amet</p>
-                    </div> -->
+                  <div class="col-6 mb-3">
+                    <h6>Phone</h6>
+                    <p class="text-muted">{{user.phone}}</p>
                   </div>
-                  <h6>About me</h6>
-                  <!-- <hr class="mt-0 mb-4"> -->
-                  <p class="text-muted">{{user.profile}}</p>
-                  {%if session['loggedin'] == True %}
-                  <div class="col-md-8">
-                        <div class="col-6 mb-3">
-                          
-                          <p class="text-muted" style="font-size: 10px;">Change password</p>
-                        </div>
-                        <div class="col-6 mb-3">
-                          
-                          <p style="color: red; margin: 0%; font-size: 10px;">Delete account</p>
-                        </div>
-                      </div>
-                 {% else %}
-                 <p></p>
-                 {%endif%}
                 </div>
+
+                <div class="row pt-1">
+                  <div class="col-6 mb-3">
+                    <h6>Trainer</h6>
+                    {%if session['loggedin'] == True %}
+                    <a href="/member/{{user.user_id}}/trainer/{{usertrain.user_id}}/view">
+                      <p class="text-muted"> {{usertrain.firstname}} {{usertrain.lastname}} </p>
+                    </a>
+                    {%else%}
+                    <a href="/trainer/{{trainer.user_id}}/profile">
+                      <p class="text-muted"> {{trainer.firstname}} {{trainer.lastname}} </p>
+                    </a>
+
+                    {%endif%}
+                  </div>
+                  <div class="col-6 mb-3">
+                    <div class="upcoming">
+                      <p><b>Upcoming meetings</b></p>
+                      {%for sch in data%}
+                      {%if sch.schedule_date==today%}
+                      <span>{{sch.schedule_date.strftime("%A %d %B %Y")}}
+                        @
+                        {{sch.schedule_time.strftime("%I:%M %p")}} <i class="fas fa-circle"
+                          style="font-size: 8px; color: rgb(4, 181, 4);"></i></span>
+                      {%else%}
+                      <span>{{sch.schedule_date.strftime("%A %d %B %Y")}}
+                        @
+                        {{sch.schedule_time.strftime("%I:%M %p")}}</span>
+                      {%endif%}
+                      {%endfor%}
+                    </div>
+                  </div>
+                </div>
+                <h6>About me</h6>
+                <!-- <hr class="mt-0 mb-4"> -->
+                <p class="text-muted">{{user.profile}}</p>
+                {%if session['loggedin'] == True %}
+                <div class="col-md-8">
+                  <div class="col-6 mb-3">
+
+                    <p class="text-muted" style="font-size: 10px;">Change password</p>
+                  </div>
+                  <div class="col-6 mb-3">
+
+                    <p style="color: red; margin: 0%; font-size: 10px;">Delete account</p>
+                  </div>
+                </div>
+                {% else %}
+                <p></p>
+                {%endif%}
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  {%endblock%}
+  </div>
+</section>
+{%endblock%}

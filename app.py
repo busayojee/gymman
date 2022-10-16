@@ -1,3 +1,4 @@
+import functools
 from flask import Flask, g, redirect, render_template, request, flash, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
@@ -15,7 +16,7 @@ app.config['UPLOADS'] = UPLOADS
 app.secret_key = "Roberto"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gyman.db'
 db = SQLAlchemy(app)
-admin = Admin(app,  name='gymonline', template_mode='bootstrap3')
+admin = Admin(app,  name='Victory Gym', template_mode='bootstrap3')
 EXTS = set(['png', 'jpg', 'jpeg'])
 VIDS = set(['webm', 'mp4', 'mov'])
 ff = FFmpeg()
@@ -198,6 +199,47 @@ admin.add_view(ModelView(Free_training, db.session))
 #     print(user.firstname)
 #     print(user.lastname)
 #     print(user.country)
+
+# def allowed(m):
+#     @functools.wraps(m)
+#     def wrapper(*args, **kwargs):
+#         print("allowed")
+#         x = m(*args, **kwargs)
+#         print("okay")
+#         return x
+#     return wrapper
+
+
+# @allowed
+# def add_2(x):
+#     return x+2
+
+
+# print(add_2.__name__)
+
+
+def login_requiredM(f):
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        if 'loggedin' in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Login required", "danger")
+            return redirect('/login')
+    return wrapper
+
+
+def login_requiredT(f):
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        if 'trainer' in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Login required", "danger")
+            return redirect('/login')
+    return wrapper
+
+
 def files(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in EXTS
 
@@ -275,9 +317,10 @@ def signup():
                 db.session.add(new_member)
                 db.session.commit()
                 return redirect('/login')
-
+            flash("Username already exists", "danger")
             return redirect(request.url)
         else:
+            flash("Password should be same as confirm", "danger")
             return redirect(request.url)
     return render_template('signup.html')
 
@@ -296,12 +339,15 @@ def login():
             member = Member.query.filter_by(user_id=id).all()
             if member:
                 session["loggedin"] = True
+                flash(f"Hello {user.firstname}", "success")
                 return redirect(f'/member/{id}')
             else:
-                session["loggedin"] = False
+                session.pop("loggedin", None)
                 session["trainer"] = True
+                flash(f"Hello {user.firstname}", "success")
                 return redirect(f'/trainer/{id}')
         else:
+            flash("Invalid Login", "danger")
             return redirect(request.url)
 
     return render_template('login.html')
@@ -309,12 +355,14 @@ def login():
 
 @app.route('/logout')
 def logout():
+    print(session)
     session.pop("trainer", None)
     session.pop("loggedin", None)
     return redirect('/')
 
 
 @app.route('/member/<int:id>')
+@login_requiredM
 def member(id):
     user = User.query.get_or_404(id)
     user1 = aliased(User)
@@ -322,23 +370,29 @@ def member(id):
     today = date.today()
     member = Member.query.filter_by(user_id=id).first()
     z = Trainer.query.filter_by(trainer_id=member.trainer_id).first()
+    data = Schedule.query.filter_by(member_id=member.member_id).order_by(
+        Schedule.schedule_date).filter(Schedule.schedule_date >= today).limit(2).all()
     page = request.args.get('page', 1, int)
     exercise = Exercise.query.filter(Exercise.member_id == member.member_id).order_by(
         desc(Exercise.date_added)).paginate(page=page, per_page=3)
     modal = Exercise.query.filter_by(member_id=member.member_id).join(Member, Member.member_id == Exercise.member_id).join(Trainer, Exercise.trainer_id == Trainer.trainer_id).join(user1, Member.user_id == user1.user_id).join(user2, Trainer.user_id == user2.user_id).add_columns(
         Exercise.exercise_id, Exercise.exercise_name, Exercise.exercise_description, Exercise.exercise_file, Exercise.exercise_link, Exercise.exercise_thumbnail, Exercise.date_added, Member.member_id, Trainer.trainer_id, user1.firstname, user1.lastname, user2.firstname.label('tfirst'), user2.lastname.label('tlast')).all()
-    trainer = User.query.filter_by(user_id=z.user_id).all()
+    if z:
+        trainer = User.query.filter_by(user_id=z.user_id).all()
+    else:
+        trainer = None
     diet = Diet.query.filter_by(member_id=member.member_id).order_by(
         desc(Diet.date_added)).paginate(page=page, per_page=3)
     modals = Diet.query.filter_by(member_id=member.member_id).join(Trainer, Trainer.trainer_id == Diet.trainer_id).join(Member, Member.member_id == Diet.member_id).join(user1, user1.user_id == Trainer.user_id).join(user2, user2.user_id == Member.user_id).add_columns(
         Diet.diet_id, Diet.diet_description, Diet.diet_name, Diet.diet_file, Diet.start_date, Diet.end_date, Diet.date_added, user1.firstname, user1.lastname, user2.firstname.label('mfirst'), user2.lastname.label('mlast')).all()
 
     if 'hx_request' in request.headers:
-        return render_template('memberpartial.html', user=user, mem=member, free=exercise, trainer=trainer, modal=modal, diet=diet, modals=modals, today=today)
-    return render_template('member.html', user=user, mem=member, free=exercise, trainer=trainer, modal=modal, modals=modals, diet=diet, today=today)
+        return render_template('memberpartial.html', user=user, mem=member, free=exercise, trainer=trainer, modal=modal, diet=diet, modals=modals, today=today, data=data)
+    return render_template('member.html', user=user, mem=member, free=exercise, trainer=trainer, modal=modal, modals=modals, diet=diet, today=today, data=data)
 
 
 @app.route('/member/<int:id>/home/diet')
+@login_requiredM
 def diet_memberhome(id):
     user = User.query.get_or_404(id)
     user1 = aliased(User)
@@ -356,6 +410,7 @@ def diet_memberhome(id):
 
 
 @app.route('/member/<int:id>/trainer')
+@login_requiredM
 def view_trainer(id):
     user = User.query.get_or_404(id)
     trainer = Trainer.query.all()
@@ -378,6 +433,7 @@ def view_trainer(id):
 
 
 @app.route('/member/<int:id>/trainer/<int:id2>/view')
+@login_requiredM
 def trainer_profile(id, id2):
     user = User.query.get_or_404(id)
     member = Member.query.filter_by(user_id=id).first()
@@ -399,6 +455,7 @@ def trainer_profile(id, id2):
 
 
 @app.route('/member/<int:id>/trainer/<int:id2>/add')
+@login_requiredM
 def add_trainer(id, id2):
     user = User.query.get_or_404(id)
     member = Member.query.filter_by(user_id=id).first()
@@ -412,6 +469,7 @@ def add_trainer(id, id2):
 
 
 @app.route('/member/<int:id>/trainer/remove')
+@login_requiredM
 def rem_trainer(id):
     user = User.query.get_or_404(id)
     member = Member.query.filter_by(user_id=id).first()
@@ -424,23 +482,23 @@ def rem_trainer(id):
 
 
 @app.route('/member/<int:id>/profile')
+@login_requiredM
 def member_profile(id):
     user = User.query.get_or_404(id)
-    member = Member.query.filter_by(user_id=id).all()
-    x = 0
-    y = 0
+    member = Member.query.filter_by(user_id=id).first()
     usertrain = 'none'
-    for mem in member:
-        x = mem.trainer_id
-    train_user = Trainer.query.filter_by(trainer_id=x).all()
-    for train in train_user:
-        y = train.user_id
-    if y != 0:
-        usertrain = User.query.get_or_404(y)
-    return render_template('memberprofile.html', user=user, usertrain=usertrain)
+    train_user = Trainer.query.filter_by(trainer_id=member.trainer_id).first()
+    today = date.today()
+    data = Schedule.query.filter_by(member_id=member.member_id).order_by(
+        Schedule.schedule_date).filter(Schedule.schedule_date >= today).limit(3).all()
+    print(data)
+    if train_user:
+        usertrain = User.query.get_or_404(train_user.user_id)
+    return render_template('memberprofile.html', user=user, usertrain=usertrain, data=data, today=today)
 
 
 @app.route('/member/<int:id>/profile/edit', methods=['GET', 'POST'])
+@login_requiredM
 def edit_member(id):
     user = User.query.get_or_404(id)
     if request.method == 'POST':
@@ -470,6 +528,7 @@ def edit_member(id):
 
 
 @app.route('/member/<int:id>/profile/image/delete', methods=['GET', 'POST'])
+@login_requiredM
 def delete_profile_image(id):
     user = User.query.get_or_404(id)
     if os.path.exists('static/uploads/' + user.profile_image):
@@ -480,6 +539,7 @@ def delete_profile_image(id):
 
 
 @app.route('/member/<int:id>/premium/all')
+@login_requiredM
 def membpremium(id):
     user = User.query.get_or_404(id)
     user1 = aliased(User)
@@ -502,6 +562,7 @@ def membpremium(id):
 
 
 @app.route('/member/<int:id>/diet')
+@login_requiredM
 def mem_diet(id):
     user = User.query.get_or_404(id)
     member = Member.query.filter_by(user_id=id).first()
@@ -527,6 +588,7 @@ def mem_diet(id):
 
 
 @app.route('/trainer/<int:id>')
+@login_requiredT
 def trainer(id):
     trainer = User.query.get_or_404(id)
     user1 = aliased(User)
@@ -556,6 +618,7 @@ def trainer(id):
 
 
 @app.route('/trainer/<int:id>/home/diet')
+@login_requiredT
 def diet_home(id):
     trainer = User.query.get_or_404(id)
     user1 = aliased(User)
@@ -572,6 +635,7 @@ def diet_home(id):
 
 
 @app.route('/trainer/<int:id>/free')
+@login_requiredT
 def free_train_home(id):
     trainer = User.query.get_or_404(id)
     train = Trainer.query.filter_by(user_id=trainer.user_id).first()
@@ -585,6 +649,7 @@ def free_train_home(id):
 
 
 @app.route('/trainer/<int:id>/member/<int:id2>/view')
+@login_requiredT
 def memberprofile(id, id2):
     user = User.query.get_or_404(id2)
     trainer = User.query.get_or_404(id)
@@ -592,28 +657,31 @@ def memberprofile(id, id2):
 
 
 @app.route('/trainer/<int:id>/profile')
+@login_requiredT
 def trainerprofile(id):
     trainer = User.query.get_or_404(id)
-    train = Trainer.query.filter_by(user_id=id).all()
-    for tr in train:
-        x = tr.trainer_id
+    train = Trainer.query.filter_by(user_id=id).first()
+    today = date.today()
+    data = Schedule.query.filter_by(trainer_id=train.trainer_id).order_by(Schedule.schedule_date).join(Member, Member.member_id == Schedule.member_id).join(
+        User, User.user_id == Member.user_id).add_columns(Schedule.schedule_id, Schedule.schedule_date, Schedule.schedule_time, User.firstname, User.lastname, User.profile_image).filter(Schedule.schedule_date > today).limit(3).all()
     page = request.args.get('page', 1, int)
     images = Image.query.order_by(desc(Image.date_added)).filter_by(
-        trainer_id=x).paginate(page=page, per_page=2)
-    img = Image.query.filter_by(trainer_id=x).all()
+        trainer_id=train.trainer_id).paginate(page=page, per_page=2)
+    img = Image.query.filter_by(trainer_id=train.trainer_id).all()
     img = len(img)
-    for tr in train:
-        memb = Member.query.filter_by(trainer_id=tr.trainer_id).all()
+
+    memb = Member.query.filter_by(trainer_id=train.trainer_id).all()
     if memb:
         me = len(memb)
     else:
         me = 0
     if 'hx_request' in request.headers:
-        return render_template('trainerimageresult.html', memb=me, trainer=trainer, images=images, img=img)
-    return render_template('trainerprofile.html', memb=me, trainer=trainer, images=images, img=img)
+        return render_template('trainerimageresult.html', memb=me, trainer=trainer, images=images, img=img, data=data)
+    return render_template('trainerprofile.html', memb=me, trainer=trainer, images=images, img=img, data=data)
 
 
 @app.route('/trainer/<int:id>/profile/edit',  methods=['GET', 'POST'])
+@login_requiredT
 def traineredit(id):
     trainer = User.query.get_or_404(id)
     if request.method == 'POST':
@@ -637,6 +705,7 @@ def traineredit(id):
 
 
 @app.route('/trainer/<int:id>/profile/image/delete',  methods=['GET', 'POST'])
+@login_requiredT
 def delete_trainer_pimage(id):
     trainer = User.query.get_or_404(id)
     if os.path.exists('static/uploads/' + trainer.profile_image):
@@ -647,6 +716,7 @@ def delete_trainer_pimage(id):
 
 
 @app.route('/trainer/<int:id>/members/view', methods=['GET'])
+@login_requiredT
 def memberview(id):
     trainer = User.query.get_or_404(id)
     train = Trainer.query.filter_by(user_id=id).all()
@@ -672,6 +742,7 @@ def memberview(id):
 
 
 @app.route('/trainer/<int:id>/image/upload', methods=['GET', 'POST'])
+@login_requiredT
 def addimage(id):
     trainer = User.query.get_or_404(id)
     train = Trainer.query.filter(Trainer.user_id == id).all()
@@ -698,6 +769,7 @@ def addimage(id):
 
 
 @app.route('/trainer/<int:id>/image/<int:id2>/delete')
+@login_requiredT
 def delete_image(id, id2):
     trainer = User.query.get_or_404(id)
     image = Image.query.get_or_404(id2)
@@ -712,6 +784,7 @@ def delete_image(id, id2):
 
 
 @app.route('/trainer/<int:id>/premiumworkout', methods=['POST', 'GET'])
+@login_requiredT
 def premium_workout(id):
     user1 = aliased(User)
     user2 = aliased(User)
@@ -771,6 +844,7 @@ def premium_workout(id):
 
 
 @app.route('/trainer/<int:id>/exerciseworkout/<int:id2>/delete')
+@login_requiredT
 def premium_delete(id, id2):
     trainer = User.query.get_or_404(id)
     video = Exercise.query.get_or_404(id2)
@@ -821,6 +895,7 @@ def premium_delete(id, id2):
 
 
 @app.route('/trainer/<int:id>/freeworkout', methods=['POST', 'GET'])
+@login_requiredT
 def trainer_free(id):
     page = request.args.get('page', 1, int)
     search = request.args.get('search')
@@ -875,6 +950,7 @@ def trainer_free(id):
 
 
 @app.route('/trainer/<int:id>/freeworkout/<int:id2>/delete')
+@login_requiredT
 def free_delete(id, id2):
     trainer = User.query.get_or_404(id)
     video = Free_training.query.get_or_404(id2)
@@ -889,6 +965,7 @@ def free_delete(id, id2):
 
 
 @app.route('/trainer/<int:id>/diet', methods=['POST', 'GET'])
+@login_requiredT
 def trainer_diet(id):
     trainer = User.query.get_or_404(id)
     train = Trainer.query.filter_by(user_id=id).first()
@@ -948,6 +1025,7 @@ def trainer_diet(id):
 
 
 @app.route('/trainer/<int:id>/diet/<int:id2>/delete')
+@login_requiredT
 def delete_diet(id, id2):
     trainer = User.query.get_or_404(id)
     diet = Diet.query.get_or_404(id2)
@@ -960,6 +1038,7 @@ def delete_diet(id, id2):
 
 
 @app.route('/trainer/<int:id>/diet/<int:id2>/edit', methods=["POST"])
+@login_requiredT
 def edit_diet(id, id2):
     trainer = User.query.get_or_404(id)
     diet = Diet.query.get_or_404(id2)
@@ -991,6 +1070,7 @@ def edit_diet(id, id2):
 
 
 @app.route('/trainer/<int:id>/schedule', methods=["POST", "GET"])
+@login_requiredT
 def trainer_schedule(id):
     trainer = User.query.get_or_404(id)
     train = Trainer.query.filter_by(user_id=id).first()
@@ -1026,6 +1106,7 @@ def trainer_schedule(id):
 
 
 @app.route('/trainer/<int:id>/schedule/<int:id2>/delete')
+@login_requiredT
 def delete_schedule(id, id2):
     trainer = User.query.get_or_404(id)
     schedule = Schedule.query.get_or_404(id2)
@@ -1035,6 +1116,7 @@ def delete_schedule(id, id2):
 
 
 @app.route('/trainer/<int:id>/schedule/<int:id2>/edit', methods=["POST"])
+@login_requiredT
 def edit_schedule(id, id2):
     trainer = User.query.get_or_404(id)
     schedule = Schedule.query.get_or_404(id2)
