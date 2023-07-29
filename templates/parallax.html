@@ -1,0 +1,65 @@
+{%extends 'layout.html'%}
+
+{% block body %}
+<section>
+    <div class="view" style="background-image: none; z-index: 0; height: 500px; object-fit: cover;">
+        <div class="full-bg-img">
+            <div class="mask rgba-white-light">
+
+                <div class="container flex-center text-center">
+                    <div class="row mt-5 py-5">
+                        <div class="col-md-12 wow fadeIn mb-3" style="animation-name: none; visibility: visible;">
+                            <div class="text-center">
+                                <h1 class="display-2 mb-2 wow fadeInDown green-text" data-wow-delay="0.3s">
+                                    TEXTE <a class="white-text font-bold">Lorem</a>
+                                </h1>
+                                <h5 class="font-up mb-3 mt-1 font-bold wow fadeInDown" data-wow-delay="0.4s">
+                                    Lorem ipsum
+                                </h5>
+
+                                <a class="btn btn-outline-white btn-lg wow fadeInDown waves-effect waves-light" href="#"
+                                    data-wow-delay="0.4s">
+                                    Un bouton par exemple
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-parallax">
+                    <video class="video-parall" src="/static/assets/p2.mp4" autoplay="" loop="">
+                    </video>
+                </div>
+            </div>
+        </div>
+</section>
+<style>
+    /*!* Parallax video styles*!*/
+    .video-parallax {
+        clip: rect(0, 100vw, 700px, 0);
+        /*!* Change second and third value to manipulate the width and height of your video *!*/
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+        visibility: hidden;
+        z-index: -100;
+    }
+
+    .view .video-parall {
+        position: fixed;
+        /* top: 0px; */
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        /* min-width: 100vw;
+        min-height: 100vh; */
+        max-width: 100%;
+        max-height: none;
+        visibility: visible;
+        object-fit: cover;
+        z-index: -1
+    }
+</style>
+{%endblock%}

@@ -190,10 +190,15 @@
                 <div class="text-white text-center">
                   <h1 class="mb-3">Time to get fit</h1>
                   <h5 class="mb-4">No more excuses</h5>
+                  {%if mem.status == 'not active'%}
+                  <a class="btn btn-outline-light btn-lg m-2" href="/member/{{user.user_id}}/payment"
+                    role="button">Subscribe</a>
+                  {%else%}
                   <a class="btn btn-outline-light btn-lg m-2" href="/member/{{user.user_id}}/premium/all" role="button"
                     rel="nofollow">View Exercises</a>
                   <a class="btn btn-outline-light btn-lg m-2" href="/member/{{user.user_id}}/diet" role="button">View
                     Diet</a>
+                  {%endif%}
                 </div>
               </div>
             </div>
@@ -204,6 +209,11 @@
             <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
               <div class="d-flex justify-content-center align-items-center h-100">
                 <div class="text-white text-center">
+                  {%if mem.status == 'not active'%}
+                  <h2>Subscribe now to get in shape</h2>
+                  <a class="btn btn-outline-light btn-lg m-2" href="/member/{{user.user_id}}/payment"
+                    role="button">Subscribe</a>
+                  {%else%}
                   {%if not mem.trainer_id %}
                   <h2>Select a trainer to reach your goals</h2>
                   <a class="btn btn-outline-light btn-lg m-2" href="/member/{{user.user_id}}/trainer"
@@ -212,6 +222,7 @@
                   <h2>Meet with your trainer</h2>
                   <a class="btn btn-outline-light btn-lg m-2" href="/member/{{user.user_id}}#trainer" role="button">View
                     Schedule</a>
+                  {%endif%}
                   {%endif%}
                 </div>
               </div>
@@ -258,14 +269,32 @@
   <!-- About section -->
 
   <div class="about" id="trainer" data-aos="fade-in">
+    {%if mem.status == 'not active'%}
+    <div class="about_content">
+      <div class="aboutus">
+        <p> <span>No Subscription</span></p>
+        <p>
+        <p class="para">
 
+          You currently have no active subscription. <a href="/member/{{user.user_id}}/payment">Click here</a> to start
+          your fitness journey
+
+        </p>
+        </p>
+      </div>
+    </div>
+
+
+    {%else%}
     {%if not mem.trainer_id %}
     <div class="about_content">
       <div class="aboutus">
         <p> <span>No Trainer</span></p>
         <p>
         <p class="para">
+
           To add a new trainer <a href="/member/{{user.user_id}}/trainer">click here</a>
+
         </p>
         </p>
       </div>
@@ -309,12 +338,15 @@
         {%endif%}
         {%endfor%}
       </div>
-    </div> {%endfor%}{% endif %}
+    </div> {%endfor%}{% endif %}{%endif%}
     <!-- End of about content -->
   </div> <!-- End of about section -->
 
   <!-- Training -->
   <div class="training" id="pexercises">
+    {%if mem.status == 'not active'%}
+
+    {%else%}
     <h3>Premium Exercise</h3>
     <a href="/member/{{user.user_id}}/premium/all" class="view">view all -></a>
     <div id="carouselMultiItemExample" class="carousel slide carousel-dark text-center" data-mdb-ride="carousel">
@@ -400,6 +432,7 @@
       {%endfor%}
 
     </div>
+    {%endif%}
   </div>
 
   <div class="dtraining" id="pdiet">
@@ -469,20 +502,26 @@
 
   <!-- Contact us -->
   <div class="contact" id="contact">
-    <h3>Contact Us</h3>
-    <div class="form_wrapper">
-      <form class="form">
-        <input type="text" placeholder="Full Name">
-        <input type="email" placeholder="Email Id">
-        <input type="tel" placeholder="Contact">
-        <textarea rows="4" placeholder="Message"></textarea>
-        <input type="submit" class="btn" value="Submit">
-      </form>
-      <!-- End of form -->
+    <div style="background: rgba(0, 0, 0, 0.5); width: 100%; height: 400px; z-index: 1; display: flex;">
+      <div style="width: 800px; height: 400px; margin: 0 25%;">
+        <div class="text-white text-center" id="vidcont" data-aos="fade-up">
+
+          <h5 class="mb-4">Contact Us</h5>
+          Featured on Forbes as one of the worlds top ten companies for fitness, VictoryGym has helped
+          well over a hundred thousand men and women across the globe get and stay fit. Start your journey
+          today.
+          <br>
+          <center>
+            <a class="btn btn-outline-light btn-lg m-2" href="/signup" role="button" rel="nofollow"
+              target="_blank">Contact Us -></a>
+            <a class="btn btn-outline-light btn-lg m-2" href="/login" target="_blank" role="button">FAQs
+              -></a>
+          </center>
+        </div>
+      </div>
     </div>
-    <!-- End of form wrapper -->
+  </div> <!-- End of contact us section -->
   </div>
-  <!-- End of contact us section -->
 
 
 

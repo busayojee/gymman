@@ -1,7 +1,7 @@
 import functools
 from flask import Flask, g, redirect, render_template, request, flash, session, abort
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from werkzeug.utils import secure_filename
@@ -9,6 +9,12 @@ from sqlalchemy import asc, desc
 from sqlalchemy.orm import aliased
 from pyffmpeg import FFmpeg
 import os
+import smtplib
+from smtplib import SMTPException
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+# help(smtplib)
+
 
 app = Flask(__name__)
 UPLOADS = "static/uploads/"
@@ -68,6 +74,8 @@ class TrainerView(ModelView):
 
 class Member(db.Model):
     member_id = db.Column(db.Integer, nullable=False, primary_key=True)
+    status = db.Column(db.String(10), nullable=False, default="not active")
+    date_active = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     trainer_id = db.Column(db.Integer, db.ForeignKey(
         'trainer.trainer_id'), nullable=True)
@@ -152,71 +160,6 @@ admin.add_view(ModelView(Image, db.session))
 admin.add_view(ModelView(Free_training, db.session))
 # admin.add_view(MemberView(Member, db.session))
 
-# x = "member"
-# admin = User(username = x, password = "newguy", confirm = "newguy", firstname = "Busayo", lastname = "Roberto", email = "newRobertoguy@gmail.com", phone = "0011110000", gender = "Male", age = 31, country = "Burundi")
-# new_admin = Admin(user_id = 1)
-# db.session.add(admin)
-# db.session.commit()
-# date = datetime.strptime('01062022', "%d%m%Y").date()
-# timer  = time.fromisoformat("06:00:00")
-# new_schedule = Schedule(schedule_date = date, schedule_time = timer)
-# db.session.add(new_schedule)
-# db.session.commit()
-# schedule = Schedule.query.all()
-# for sch in schedule:
-#     print(sch.schedule_date)
-#     print(sch.schedule_time)
-
-
-# train_id = User.query.filter(User.username == x).with_entities(User.user_id)
-# new_train = Member(user_id = train_id)
-# db.session.add(new_train)
-# db.session.commit()
-# x = 1
-# asks = Member.query.all()
-# mem  = Member.query.filter(Member.member_id == x).first()
-# mem.trainer_id = 1
-
-# administrate = User(username = "admin", password = "victory12345", confirm = "victory12345", firstname = "Admin", lastname="Admin", email="admin@gmail.com", phone = "00000000", gender = "Male", age=25, country="Cyprus", profile = "I am the Admin")
-# db.session.add(administrate)
-# db.session.commit()
-# trainer = Trainer(user_id = 1)
-# db.session.add(trainer)
-# db.session.commit()
-# member = Trainer.query.all()
-# print(member)
-
-
-# db.session.commit()
-# for ask in asks:
-#     print(ask.member_id)
-#     print(ask.user_id)
-#     print(ask.trainer_id)
-
-# users =  User.query.filter_by(user_id = x).all()
-# for user in users:
-#     print(user.username)
-#     print(user.firstname)
-#     print(user.lastname)
-#     print(user.country)
-
-# def allowed(m):
-#     @functools.wraps(m)
-#     def wrapper(*args, **kwargs):
-#         print("allowed")
-#         x = m(*args, **kwargs)
-#         print("okay")
-#         return x
-#     return wrapper
-
-
-# @allowed
-# def add_2(x):
-#     return x+2
-
-
-# print(add_2.__name__)
-
 
 def login_requiredM(f):
     @functools.wraps(f)
@@ -265,17 +208,31 @@ def image():
             return redirect(request.url)
     return render_template('upload.html', free=free)
 
+# !!!!!!!!!!!!!!!!!!!!!! Check if the user is in session before returning home/ First pop the sessions!!!!!!!!!!!!!!!!!!!
+
 
 @app.route('/')
 def home():
+    train = Trainer.query.all()
+    t = {}
+    for tr in train:
+        memb = Member.query.filter_by(trainer_id=tr.trainer_id).all()
+        t[tr.trainer_id] = len(memb)
+    t = sorted(t.items(), key=lambda x: x[1], reverse=True)
+    t = dict(t[:3])
+    k = []
+    for keys, values in t.items():
+        trained = Trainer.query.filter_by(trainer_id=keys).join(User, User.user_id == Trainer.user_id).add_columns(
+            User.firstname, User.lastname, User.profile, User.profile_image, User.user_id).first()
+        k.append(trained)
     page = request.args.get('page', 1, int)
     free = Free_training.query.order_by(
         desc(Free_training.date_added)).paginate(page=page, per_page=3)
     modal = Free_training.query.join(Trainer, Free_training.trainer_id == Trainer.trainer_id).join(User, Trainer.user_id == User.user_id).add_columns(
         Free_training.free_thumbnail, Free_training.date_added, Free_training.free_caption, Free_training.free_description, Free_training.free_file, Free_training.free_link, User.firstname, User.lastname).all()
     if 'hx_request' in request.headers:
-        return render_template('free.html', free=free, modal=modal)
-    return render_template("home.html", free=free, modal=modal)
+        return render_template('free.html', free=free, modal=modal, k=k)
+    return render_template("home.html", free=free, modal=modal, k=k)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -358,6 +315,7 @@ def logout():
     print(session)
     session.pop("trainer", None)
     session.pop("loggedin", None)
+    flash("You're logged out", "primary")
     return redirect('/')
 
 
@@ -368,7 +326,14 @@ def member(id):
     user1 = aliased(User)
     user2 = aliased(User)
     today = date.today()
+    d = datetime.now()
+    # g = datetime.now() + timedelta(days=30)
     member = Member.query.filter_by(user_id=id).first()
+    if member.date_active:
+        if d > member.date_active + timedelta(days=30):
+            member.status = 'not active'
+            db.session.commit()
+            flash("subscription expired", "primary")
     z = Trainer.query.filter_by(trainer_id=member.trainer_id).first()
     data = Schedule.query.filter_by(member_id=member.member_id).order_by(
         Schedule.schedule_date).filter(Schedule.schedule_date >= today).limit(2).all()
@@ -473,9 +438,19 @@ def add_trainer(id, id2):
 def rem_trainer(id):
     user = User.query.get_or_404(id)
     member = Member.query.filter_by(user_id=id).first()
+    schedule = Schedule.query.filter_by(member_id=member.member_id).all()
+    diet = Diet.query.filter_by(member_id=member.member_id).all()
+    exercise = Exercise.query.filter_by(member_id=member.member_id).all()
     if member:
         member.trainer_id = None
+        for ex in exercise:
+            db.session.delete(ex)
+        for di in diet:
+            db.session.delete(di)
+        for sch in schedule:
+            db.session.delete(sch)
         db.session.commit()
+
         return redirect(f'/member/{user.user_id}#trainer')
     else:
         return redirect(request.url)
@@ -584,6 +559,46 @@ def mem_diet(id):
         return render_template('memberdietpage.html', user=user, diet=diet, modal=modal, today=today)
     return render_template('memberdiet.html', user=user, diet=diet, modal=modal, today=today)
 
+
+@app.route('/member/<int:id>/payment', methods=['POST', 'GET'])
+@login_requiredM
+def payment(id):
+    user = User.query.get_or_404(id)
+    member = Member.query.filter_by(user_id=id).first()
+    if request.method == 'POST':
+        email = request.form["email"]
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        member.status = 'active'
+        d = datetime.now()
+        member.date_active = d
+        db.session.commit()
+        sender = "robertonzohabonayo@gmail.com"
+        receiver = email
+        content = f"""Hello {firstname} {lastname},
+You are successfully subscribed to victory gym. You can now choose a trainer and start your fitness journey
+                
+                """
+        message = MIMEMultipart()
+        message['From'] = sender
+        message['To'] = receiver
+        message['Subject'] = 'Subscription'  # The subject line
+        # The body and the attachments for the mail
+        message.attach(MIMEText(content, 'plain'))
+        try:
+            smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
+            smtpobj.starttls()
+            smtpobj.login(user=sender,
+                          password="fmtbzeenyqxtllsi")
+            text = message.as_string()
+            smtpobj.sendmail(from_addr=sender, to_addrs=receiver, msg=text)
+            print("Email sent successfully")
+            smtpobj.quit()
+        except SMTPException as e:
+            print(e)
+        return redirect(f"/member/{user.user_id}")
+
+    return render_template("payment.html", user=user)
 # TRAINER
 
 
@@ -1151,6 +1166,9 @@ def freevideo_all():
     return render_template("freevideoall.html", free=free, pagin=pagin)
 
 
+@app.route('/parallax')
+def parallax():
+    return render_template("parallax.html")
 # link = "https://www.youtube.com/embed/-237OttBIBE"
 # linklist = link.split("/")
 # print(linklist)
@@ -1212,6 +1230,5 @@ def freevideo_all():
 
 # if vids(filename) is True:
 #     print(True)
-
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=80)

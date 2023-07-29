@@ -83,7 +83,7 @@ h3 {
     align-items: center;
     justify-content: space-around;
     height: 8vh;
-    background: #fff;
+    background: rgb(0, 0, 0);
     position: sticky;
     top: 0;
 
@@ -95,7 +95,7 @@ h3 {
 }
 
 .logo p {
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-size: 35px;
     font-weight: 600;
     letter-spacing: 2px;
@@ -115,7 +115,7 @@ h3 {
 }
 
 .navlist li a {
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-size: 15px;
     font-weight: 500;
     text-decoration: none;
@@ -188,7 +188,7 @@ h3 {
 }
 
 /* dropdown */
-li.dropdown {
+.dropdown {
     display: inline-block;
 
 }
@@ -311,6 +311,26 @@ li.dropdown {
     border-radius: 7px;
 }
 
+.profile {
+    background: #fff;
+    width: 90px;
+    border-radius: 20px;
+    height: 30px;
+    /* margin-top: -8px; */
+}
+
+
+
+/* .profile_name {
+    margin-top: 8px;
+} */
+
+.profile_img {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
 @media screen and (man-width:1000px) {
     .content {
         margin-left: -10%;
@@ -325,10 +345,12 @@ li.dropdown {
     max-width: 100%;
     max-height: 92vh;
 } */
+
+
 /* About */
 .about {
     width: 100%;
-    height: 490px;
+    height: 400px;
     border-radius: 12px;
     box-shadow: 0 30px 45px rgba(26, 26, 26, 0.1);
 }
@@ -476,12 +498,106 @@ li.dropdown {
     box-shadow: 0 30px 45px rgba(26, 26, 26, 0.1);
 }
 
+.ttraining {
+    width: 100%;
+    height: 550px;
+    border-radius: 12px;
+    box-shadow: 0 30px 45px rgba(26, 26, 26, 0.1);
+}
+
+
 .dtraining {
     width: 100%;
     height: 700px;
     border-radius: 12px;
     box-shadow: 0 30px 45px rgba(26, 26, 26, 0.1);
 }
+
+.vtraining {
+    width: 100%;
+    height: 500px;
+
+    border-radius: 12px;
+    box-shadow: 0 30px 45px rgba(26, 26, 26, 0.1);
+
+    background-color: white;
+    /* The image used */
+    background-image: url("/static/assets/p2.jpg");
+
+    /* Set a specific height */
+    min-height: 500px;
+    display: flex;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    z-index: -1;
+}
+
+
+#vidcont {
+    /* position: relative; */
+    /* bottom: 0; */
+    /* background: rgba(255, 255, 255, 0.5); */
+    /* width: 100%; */
+    padding: 20px;
+    z-index: 9999999999;
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-items: center;
+}
+
+/* 
+#background-video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+/* page content */
+/* h1,
+h2 {
+    color: white;
+    font-family: Trebuchet MS;
+    font-weight: bold;
+    text-align: center;
+}
+
+h1 {
+    font-size: 6rem;
+    margin-top: 30vh;
+}
+
+h2 {
+    font-size: 3rem;
+}
+
+@media (max-width: 750px) {
+    #background-video {
+        display: none;
+    }
+
+    body {
+        background: url("https://assets.codepen.io/6093409/river.jpg") no-repeat;
+        background-size: cover;
+    }
+} */
+.vid {
+    width: 100%;
+
+}
+
+
 
 .view {
     display: flex;
@@ -574,7 +690,25 @@ li.dropdown {
 }
 
 /* Contact Us */
-.form_wrapper {
+.contact {
+    background-color: white;
+    /* The image used */
+    background-image: url("/static/assets/33.jpg");
+
+    /* Set a specific height */
+
+    height: 400px;
+    display: flex;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    z-index: -1;
+}
+
+/* .form_wrapper {
     margin-top: 4rem;
     display: flex;
     width: 50vh;
@@ -670,11 +804,11 @@ textarea {
         margin-left: 3%;
 
     }
-}
+} */
 
 /* footer */
 .footer {
-    margin-top: 7rem;
+    margin-top: 1.5rem;
     padding: 2rem;
     width: 100%;
     background: #000000;
@@ -988,4 +1122,10 @@ textarea {
     .upcoming {
         padding: 0.5rem;
     }
+}
+
+#pvid {
+    max-height: 100px;
+    max-width: 100px;
+    z-index: 100;
 }
