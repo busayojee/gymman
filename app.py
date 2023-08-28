@@ -573,7 +573,7 @@ def payment(id):
         d = datetime.now()
         member.date_active = d
         db.session.commit()
-        sender = "robertonzohabonayo@gmail.com"
+        sender = "email"
         receiver = email
         content = f"""Hello {firstname} {lastname},
 You are successfully subscribed to victory gym. You can now choose a trainer and start your fitness journey
@@ -589,7 +589,7 @@ You are successfully subscribed to victory gym. You can now choose a trainer and
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             smtpobj.login(user=sender,
-                          password="fmtbzeenyqxtllsi")
+                          password="password")
             text = message.as_string()
             smtpobj.sendmail(from_addr=sender, to_addrs=receiver, msg=text)
             print("Email sent successfully")
